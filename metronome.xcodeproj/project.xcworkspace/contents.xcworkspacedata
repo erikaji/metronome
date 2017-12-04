@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:metronome.xcodeproj">
+      location = "self:/Users/erikaji/Dropbox/FILES/Hobbies/Metronome App/metronome/metronome.xcodeproj">
    </FileRef>
 </Workspace>
