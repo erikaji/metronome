@@ -51,12 +51,9 @@
                             <slider opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="0.5" minValue="0.0" maxValue="1" translatesAutoresizingMaskIntoConstraints="NO" id="stq-So-BSn">
                                 <rect key="frame" x="161" y="650" width="53" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <connections>
-                                    <action selector="tempoSliderChanged:" destination="BYZ-38-t0r" eventType="valueChanged" id="K44-I0-Ulp"/>
-                                </connections>
                             </slider>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="k2v-TK-Z22">
-                                <rect key="frame" x="87" y="354" width="200" height="200"/>
+                                <rect key="frame" x="37" y="304" width="300" height="300"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </view>
                         </subviews>
@@ -66,7 +63,6 @@
                         <outlet property="knobPlaceholder" destination="k2v-TK-Z22" id="HJu-Kr-ZEB"/>
                         <outlet property="playPause" destination="eDC-q9-mu0" id="FXf-fN-hQ5"/>
                         <outlet property="tempoLabel" destination="doc-gs-7rd" id="dRJ-jG-XRe"/>
-                        <outlet property="tempoSlider" destination="stq-So-BSn" id="yWy-W5-W4o"/>
                         <outlet property="tempoTextField" destination="Y6G-qb-7rD" id="qEo-VJ-0uN"/>
                     </connections>
                 </viewController>
