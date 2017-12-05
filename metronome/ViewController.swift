@@ -12,9 +12,7 @@ import AVFoundation
 class ViewController: UIViewController, UITextFieldDelegate {
     // MARK: Properties
     @IBOutlet weak var tempoLabel: UILabel!
-    @IBOutlet weak var tempoTextField: UITextField!
     @IBOutlet weak var playPause: UIButton!
-    // @IBOutlet weak var tempoSlider: UISlider!
     @IBOutlet weak var knobPlaceholder: UIView!
     
     var metronomeOn = 0
@@ -37,10 +35,6 @@ class ViewController: UIViewController, UITextFieldDelegate {
 
         // Ongoing
         updateLabel()
-
-        // Handle the text field’s user input through delegate callbacks.
-        tempoTextField.delegate = self
-        tempoTextField.text = String(tempo)
     }
 
     override func didReceiveMemoryWarning() {
@@ -58,18 +52,11 @@ class ViewController: UIViewController, UITextFieldDelegate {
     
     // MARK: setupKnob
     func setupKnob() {
-        // Hide regular slider
-        /*
-        tempoSlider.setThumbImage(nil, for: UIControlState.normal)
-        tempoSlider.thumbTintColor = UIColor.clear
-        tempoSlider.minimumTrackTintColor = UIColor.clear
-        tempoSlider.maximumTrackTintColor = UIColor.clear */
-        
-        // Define knob parameters
         knob = Knob(frame: knobPlaceholder.bounds)
-        knob.value = Float(tempo) // NOTE: This should soon become "tempo"
         knob.minimumValue = 40
         knob.maximumValue = 208
+        knob.value = Float(tempo)
+
         knob.lineWidth = 4.0
         knob.pointerLength = 12.0
         knob.addTarget(self, action: #selector(self.knobValueChanged), for: .valueChanged)
@@ -77,20 +64,19 @@ class ViewController: UIViewController, UITextFieldDelegate {
     }
 
     // MARK: updateLabel
-    func updateLabel() {
-        tempo = Int(knob.value)
+    @objc func updateLabel() {
         tempoLabel.text = NumberFormatter.localizedString(from: NSNumber(value: tempo), number: NumberFormatter.Style.none)
     }
     
     // MARK: UITextFieldDelegate
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+    /* func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         // Hide the keyboard.
         textField.resignFirstResponder()
         return true
     }
     func textFieldDidEndEditing(_ textField: UITextField) {
         tempoLabel.text = textField.text
-    }
+    } */
     
     
     
@@ -125,24 +111,13 @@ class ViewController: UIViewController, UITextFieldDelegate {
     // MARK: knobValueChanged
     @objc func knobValueChanged(knob: Knob) {
         tempo = Int(knob.value)
-        // tempoSlider.value = knob.value
         updateLabel()
     }
-    
 
 
-    
     
     // MARK: Actions
-    /*
-    @IBAction func tempoSliderChanged(_ sender: UISlider) {
-        knob.value = tempoSlider.value
-        updateLabel()
-    }*/
-    
     @IBAction func playPauseButton(_ sender: UIButton) {
-        // Temporarily, pressing play/pause confirms the tempo entry
-        tempoLabel.text = tempoTextField.text
         if metronomeOn == 0 {
             metronomeOn = 1
             sender.setImage(UIImage(named:"Pause_White"),for: .normal)
