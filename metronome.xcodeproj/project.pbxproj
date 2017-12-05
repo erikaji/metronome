@@ -13,6 +13,11 @@
 		139ADF321FD6067700D103C0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 139ADF311FD6067700D103C0 /* Assets.xcassets */; };
 		139ADF351FD6067700D103C0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 139ADF331FD6067700D103C0 /* LaunchScreen.storyboard */; };
 		139ADF401FD6067700D103C0 /* metronomeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 139ADF3F1FD6067700D103C0 /* metronomeTests.swift */; };
+		139ADF4B1FD644AA00D103C0 /* OpenSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 139ADF4A1FD644AA00D103C0 /* OpenSans-Regular.ttf */; };
+		139ADF541FD651FA00D103C0 /* Woodblock.wav in Resources */ = {isa = PBXBuildFile; fileRef = 139ADF531FD651FA00D103C0 /* Woodblock.wav */; };
+		139ADF571FD66B4400D103C0 /* Pause_White.png in Resources */ = {isa = PBXBuildFile; fileRef = 139ADF551FD66B4400D103C0 /* Pause_White.png */; };
+		139ADF581FD66B4400D103C0 /* Play_White.png in Resources */ = {isa = PBXBuildFile; fileRef = 139ADF561FD66B4400D103C0 /* Play_White.png */; };
+		139ADF5A1FD66D5100D103C0 /* Knob.swift in Sources */ = {isa = PBXBuildFile; fileRef = 139ADF591FD66D5100D103C0 /* Knob.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -36,6 +41,11 @@
 		139ADF3B1FD6067700D103C0 /* metronomeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = metronomeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		139ADF3F1FD6067700D103C0 /* metronomeTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = metronomeTests.swift; sourceTree = "<group>"; };
 		139ADF411FD6067700D103C0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		139ADF4A1FD644AA00D103C0 /* OpenSans-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OpenSans-Regular.ttf"; sourceTree = "<group>"; };
+		139ADF531FD651FA00D103C0 /* Woodblock.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Woodblock.wav; sourceTree = "<group>"; };
+		139ADF551FD66B4400D103C0 /* Pause_White.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Pause_White.png; sourceTree = "<group>"; };
+		139ADF561FD66B4400D103C0 /* Play_White.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Play_White.png; sourceTree = "<group>"; };
+		139ADF591FD66D5100D103C0 /* Knob.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Knob.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,8 +87,12 @@
 		139ADF291FD6067700D103C0 /* metronome */ = {
 			isa = PBXGroup;
 			children = (
+				139ADF521FD651F100D103C0 /* Sounds */,
+				139ADF4D1FD6494300D103C0 /* Images */,
+				139ADF4A1FD644AA00D103C0 /* OpenSans-Regular.ttf */,
 				139ADF2A1FD6067700D103C0 /* AppDelegate.swift */,
 				139ADF2C1FD6067700D103C0 /* ViewController.swift */,
+				139ADF591FD66D5100D103C0 /* Knob.swift */,
 				139ADF2E1FD6067700D103C0 /* Main.storyboard */,
 				139ADF311FD6067700D103C0 /* Assets.xcassets */,
 				139ADF331FD6067700D103C0 /* LaunchScreen.storyboard */,
@@ -94,6 +108,23 @@
 				139ADF411FD6067700D103C0 /* Info.plist */,
 			);
 			path = metronomeTests;
+			sourceTree = "<group>";
+		};
+		139ADF4D1FD6494300D103C0 /* Images */ = {
+			isa = PBXGroup;
+			children = (
+				139ADF551FD66B4400D103C0 /* Pause_White.png */,
+				139ADF561FD66B4400D103C0 /* Play_White.png */,
+			);
+			path = Images;
+			sourceTree = "<group>";
+		};
+		139ADF521FD651F100D103C0 /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				139ADF531FD651FA00D103C0 /* Woodblock.wav */,
+			);
+			path = Sounds;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -179,9 +210,13 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				139ADF571FD66B4400D103C0 /* Pause_White.png in Resources */,
 				139ADF351FD6067700D103C0 /* LaunchScreen.storyboard in Resources */,
+				139ADF541FD651FA00D103C0 /* Woodblock.wav in Resources */,
 				139ADF321FD6067700D103C0 /* Assets.xcassets in Resources */,
+				139ADF4B1FD644AA00D103C0 /* OpenSans-Regular.ttf in Resources */,
 				139ADF301FD6067700D103C0 /* Main.storyboard in Resources */,
+				139ADF581FD66B4400D103C0 /* Play_White.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -200,6 +235,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				139ADF2D1FD6067700D103C0 /* ViewController.swift in Sources */,
+				139ADF5A1FD66D5100D103C0 /* Knob.swift in Sources */,
 				139ADF2B1FD6067700D103C0 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
