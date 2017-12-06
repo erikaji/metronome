@@ -54,10 +54,28 @@ public class Knob: UIControl {
         set { knobRenderer.lineWidth = newValue }
     }
     
-    /** Specifies the length in points of the pointer on the knob. Defaults to 6.0 */
+    /** Specifies whether the pointer is linear or circular. */
+    public var circularPointer: Bool {
+        get {return knobRenderer.circularPointer }
+        set {knobRenderer.circularPointer = newValue }
+    }
+    
+    /** Specifies the width in points of the linear pointer on the knob. Defaults to 2.0. Does not affect the circular pointer. */
+    public var pointerWidth: CGFloat {
+        get { return knobRenderer.pointerWidth }
+        set { knobRenderer.pointerWidth = newValue }
+    }
+    
+    /** Specifies the length in points of the linear pointer on the knob. Defaults to 6.0. Does not affect the circular pointer. */
     public var pointerLength: CGFloat {
         get { return knobRenderer.pointerLength }
         set { knobRenderer.pointerLength = newValue }
+    }
+    
+    /** Specifies the radius in points of the circular pointer on the knob. Defaults to 3.0. Does not affect the linear pointer. */
+    public var pointerRadius: CGFloat {
+        get { return knobRenderer.pointerRadius }
+        set { knobRenderer.pointerRadius = newValue }
     }
     
     /** Contains the minimum value of the receiver. */
@@ -99,9 +117,13 @@ public class Knob: UIControl {
         knobRenderer.endAngle = CGFloat(CGFloat.pi * 3.0 / 8.0);
         knobRenderer.pointerAngle = knobRenderer.startAngle;
         knobRenderer.lineWidth = 2.0
+        knobRenderer.circularPointer = false
+        knobRenderer.pointerWidth = 2.0
         knobRenderer.pointerLength = 6.0
+        knobRenderer.pointerRadius = 3.0 // just in case
         
         layer.addSublayer(knobRenderer.trackLayer)
+        layer.addSublayer(knobRenderer.trackEndsLayer)
         layer.addSublayer(knobRenderer.pointerLayer)
     }
     
@@ -146,8 +168,8 @@ public class Knob: UIControl {
 private class KnobRenderer {
     // MARK: Initialization
     init() {
-        trackLayer.fillColor = UIColor.clear.cgColor
-        pointerLayer.fillColor = UIColor.clear.cgColor
+        trackLayer.fillColor = UIColor.clear.cgColor // track has no interior
+        pointerLayer.fillColor = UIColor.white.cgColor // circle pointer's interior color
     }
     
     
@@ -159,7 +181,7 @@ private class KnobRenderer {
         }
         set(strokeColor) {
             trackLayer.strokeColor = strokeColor.cgColor
-            pointerLayer.strokeColor = strokeColor.cgColor
+            trackEndsLayer.fillColor = strokeColor.cgColor
         }
     }
     
@@ -172,11 +194,21 @@ private class KnobRenderer {
     var lineWidth: CGFloat = 1.0 {
         didSet { update() }
     }
+    var circularPointer: Bool = false {
+        didSet { update() }
+    }
+    var pointerWidth: CGFloat = 1.0 {
+        didSet { update() }
+    }
     var pointerLength: CGFloat = 0.0 {
+        didSet { update() }
+    }
+    var pointerRadius: CGFloat = 0.0 {
         didSet { update() }
     }
     
     let trackLayer = CAShapeLayer()
+    let trackEndsLayer = CAShapeLayer()
     let pointerLayer = CAShapeLayer()
     
     var backingPointerAngle: CGFloat = 0.0
@@ -210,19 +242,36 @@ private class KnobRenderer {
         let arcCenter = CGPoint(x: trackLayer.bounds.width / 2.0, y: trackLayer.bounds.height / 2.0)
         let offset = max(pointerLength, trackLayer.lineWidth / 2.0)
         let radius = min(trackLayer.bounds.height, trackLayer.bounds.width) / 2.0 - offset;
-        trackLayer.path = UIBezierPath(arcCenter: arcCenter, radius: radius, startAngle: startAngle, endAngle: endAngle, clockwise: true).cgPath
+        let path = UIBezierPath(arcCenter: arcCenter, radius: radius, startAngle: startAngle, endAngle: endAngle, clockwise: true)
+        trackLayer.path = path.cgPath
+
+        // Create rounded track ends for round pointer
+        if circularPointer {
+            let startRect = CGRect(x: trackLayer.bounds.width / 2.0 - (radius * sin(3 * CGFloat.pi / 2 - startAngle)) - trackLayer.lineWidth / 2.0, y: trackLayer.bounds.height / 2.0 - (radius * cos(3 * CGFloat.pi / 2 - startAngle)) - trackLayer.lineWidth / 2.0, width: trackLayer.lineWidth, height: trackLayer.lineWidth)
+            let startPath = UIBezierPath(ovalIn:startRect)
+            let endRect = CGRect(x: trackLayer.bounds.width / 2.0 + (radius * sin(CGFloat.pi / 2 - endAngle)) - trackLayer.lineWidth / 2.0, y: trackLayer.bounds.height / 2.0 + (radius * cos(CGFloat.pi / 2 - endAngle)) - trackLayer.lineWidth / 2.0, width: trackLayer.lineWidth, height: trackLayer.lineWidth)
+            let endPath = UIBezierPath(ovalIn:endRect)
+            startPath.append(endPath)
+            trackEndsLayer.path = startPath.cgPath
+        }
     }
     
     func updatePointerLayerPath() {
         let path = UIBezierPath()
-        path.move(to: CGPoint(x: pointerLayer.bounds.width - pointerLength - pointerLayer.lineWidth / 2.0, y: pointerLayer.bounds.height / 2.0))
-        path.addLine(to: CGPoint(x: pointerLayer.bounds.width, y: pointerLayer.bounds.height / 2.0))
+        if !circularPointer {
+            path.move(to: CGPoint(x: pointerLayer.bounds.width - trackLayer.lineWidth / 2.0 + pointerLength / 2.0, y: pointerLayer.bounds.height / 2.0))
+            path.addLine(to: CGPoint(x: pointerLayer.bounds.width - trackLayer.lineWidth / 2.0 - pointerLength / 2.0, y: pointerLayer.bounds.height / 2.0))
+        } else {
+            let circleRect = CGRect(x: pointerLayer.bounds.width - trackLayer.lineWidth / 2.0 - pointerRadius, y: pointerLayer.bounds.height / 2.0 - pointerRadius, width: pointerRadius * 2.0, height: pointerRadius * 2.0)
+            let circlePath = UIBezierPath(ovalIn: circleRect)
+            path.append(circlePath)
+        }
         pointerLayer.path = path.cgPath
     }
     
     func update() {
         trackLayer.lineWidth = lineWidth
-        pointerLayer.lineWidth = lineWidth
+        pointerLayer.lineWidth = pointerWidth
         
         updateTrackLayerPath()
         updatePointerLayerPath()

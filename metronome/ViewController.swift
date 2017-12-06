@@ -29,10 +29,12 @@ class ViewController: UIViewController, UITextFieldDelegate {
     }
     
     enum VisualConstants {
-        static let startAngle = -CGFloat(CGFloat.pi * 7.0 / 5.0)
-        static let endAngle = CGFloat(CGFloat.pi * 2.0 / 5.0)
-        static let lineWidth = 8.0
-        static let pointerLength = 32.0
+        static let startAngle = -CGFloat(CGFloat.pi * 6.0 / 5.0)
+        static let endAngle = CGFloat(CGFloat.pi * 1.0 / 5.0)
+        static let lineWidth = 18.0
+        static let lineColor = UIColor(red: 0, green: 0.3, blue: 0.5, alpha: 1.0)
+        static let circularPointer = true
+        static let pointerRadius = lineWidth / 2.0 - 2.0
     }
     
     
@@ -41,16 +43,26 @@ class ViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var tempoLabel: UILabel!
     @IBOutlet weak var tempoNameLabel: UILabel!
     @IBOutlet weak var knobPlaceholder: UIView!
+    @IBOutlet weak var pendulumPlaceholder: UIView!
     @IBOutlet weak var playPause: UIButton!
     
+    // Knob
     var knob: Knob!
+
+    // Pendulum
+    var pendulumTrackLayer = CAShapeLayer()
+    var pendulumBobLayer = CAShapeLayer()
+    
+    // Player
     var player: AVAudioPlayer?
     var beatTimer = Timer()
+
+    // Initialize
     var metronomeOn = 0
     var currentTempoIndex = TempoConstants.startingTempoIndex
     
-
     
+
     // MARK: viewDidLoad()
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -58,7 +70,8 @@ class ViewController: UIViewController, UITextFieldDelegate {
         // Setup
         setupTempoLabels()
         setupKnob()
-        view.tintColor = UIColor.red
+        setupPendulum()
+        view.tintColor = VisualConstants.lineColor
         view.bringSubview(toFront: playPause)
         updateLabel(tempoIndex: currentTempoIndex)
     }
@@ -101,9 +114,24 @@ class ViewController: UIViewController, UITextFieldDelegate {
         knob.startAngle = VisualConstants.startAngle
         knob.endAngle = VisualConstants.endAngle
         knob.lineWidth = CGFloat(VisualConstants.lineWidth)
-        knob.pointerLength = CGFloat(VisualConstants.pointerLength)
+        knob.circularPointer = VisualConstants.circularPointer
+        knob.pointerRadius = CGFloat(VisualConstants.pointerRadius)
         knob.addTarget(self, action: #selector(self.knobValueChanged), for: .valueChanged)
         knobPlaceholder.addSubview(knob)
+    }
+    
+    
+    
+    // MARK: setupPendulum
+    func setupPendulum() {
+        pendulumTrackLayer.path = UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: pendulumPlaceholder.bounds.maxX, height: CGFloat(VisualConstants.lineWidth)), cornerRadius: 25).cgPath
+        pendulumTrackLayer.fillColor = VisualConstants.lineColor.cgColor
+        pendulumPlaceholder.layer.addSublayer(pendulumTrackLayer)
+        
+        let pendulumBobRect = CGRect(x: 2.0, y: 2.0, width: VisualConstants.pointerRadius * 2.0, height: VisualConstants.pointerRadius * 2.0)
+        pendulumBobLayer.path = UIBezierPath(ovalIn: pendulumBobRect).cgPath
+        pendulumBobLayer.fillColor = UIColor.white.cgColor
+        pendulumPlaceholder.layer.addSublayer(pendulumBobLayer)
     }
     
     
@@ -118,13 +146,11 @@ class ViewController: UIViewController, UITextFieldDelegate {
         updateLabel(tempoIndex: currentTempoIndex)
         if metronomeOn == 1 {
             updateBeat(tempo: currentTempo)
+            updatePendulum(tempo: currentTempo)
         }
-        // code below makes the pointer snap into place
-        knob.setValue(value: Float(currentTempoIndex), animated: false)
+        knob.value = Float(currentTempoIndex)
     }
 
-
-    
     // MARK: updateLabel
     @objc func updateLabel(tempoIndex: Int) {
         let tempo = tempoValues[tempoIndex]
@@ -133,11 +159,11 @@ class ViewController: UIViewController, UITextFieldDelegate {
     }
 
     
-
+    
     // MARK: updateBeat
     func updateBeat(tempo: Int) {
         beatTimer.invalidate()
-        let timeInterval: Double = 60.0 / Double(tempo)
+        let timeInterval: Double = 60.0 / Double(tempo) // 60 sec/min * 1 min/tempo beats = # secs/beat
         beatTimer = Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: #selector(self.playSound), userInfo: nil, repeats: true)
     }
     
@@ -161,6 +187,31 @@ class ViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
+    // MARK: updatePendulum
+    func updatePendulum(tempo: Int) {
+        // Definitions
+        let endX = pendulumPlaceholder.bounds.maxX - CGFloat(2.0 * VisualConstants.pointerRadius) - 2
+        let timeInterval: Double = 60.0 / Double(tempo) // 60 sec/min * 1 min/tempo beats = # secs/beat
+        let moveToRight = CABasicAnimation(keyPath: "position")
+        moveToRight.fromValue = [0,0]
+        moveToRight.toValue = [endX, 0]
+        moveToRight.duration = timeInterval
+        moveToRight.beginTime = 0
+        
+        let moveToLeft = CABasicAnimation(keyPath: "position")
+        moveToLeft.fromValue = [endX, 0]
+        moveToLeft.toValue = [0, 0]
+        moveToLeft.duration = timeInterval
+        moveToLeft.beginTime = moveToRight.duration
+
+        let backAndForth = CAAnimationGroup()
+        backAndForth.animations = [moveToRight, moveToLeft]
+        backAndForth.duration = moveToRight.duration + moveToLeft.duration
+        backAndForth.repeatCount = Float.infinity
+        
+        pendulumBobLayer.add(backAndForth, forKey: nil)
+    }
+    
     
     
     // MARK: Actions
@@ -171,10 +222,12 @@ class ViewController: UIViewController, UITextFieldDelegate {
             playSound() // Play first sound before changing to use the timer
             let currentTempo = tempoValues[currentTempoIndex]
             updateBeat(tempo: currentTempo)
+            updatePendulum(tempo: currentTempo)
         } else {
             metronomeOn = 0
             sender.setImage(UIImage(named:"Play_White"),for: .normal)
             beatTimer.invalidate()
+            pendulumBobLayer.removeAllAnimations()
         }
     }
 }
