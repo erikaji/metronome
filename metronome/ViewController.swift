@@ -114,6 +114,8 @@ class ViewController: UIViewController, UITextFieldDelegate {
         if metronomeOn == 1 {
             updateBeat(tempo: currentTempo)
         }
+        // code below makes the pointer snap into place
+        // knob.setValue(value: Float(currentTempo), animated: false)
     }
 
     // MARK: getClosestTempo
