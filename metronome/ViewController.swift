@@ -28,19 +28,26 @@ class ViewController: UIViewController, UITextFieldDelegate {
         static let startingTempo = 92
     }
     
+    enum VisualConstants {
+        static let startAngle = -CGFloat(CGFloat.pi * 7.0 / 5.0)
+        static let endAngle = CGFloat(CGFloat.pi * 2.0 / 5.0)
+        static let lineWidth = 8.0
+        static let pointerLength = 32.0
+    }
+    
     
     
     // MARK: Properties
     @IBOutlet weak var tempoLabel: UILabel!
     @IBOutlet weak var tempoNameLabel: UILabel!
-    @IBOutlet weak var playPause: UIButton!
     @IBOutlet weak var knobPlaceholder: UIView!
+    @IBOutlet weak var playPause: UIButton!
     
     var knob: Knob!
     var player: AVAudioPlayer?
     var beatTimer = Timer()
-    var metronomeOn = 0 // metronome starts out off
-    var tempo = TempoConstants.startingTempo
+    var metronomeOn = 0
+    var currentTempo = TempoConstants.startingTempo
     
 
     
@@ -53,7 +60,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
         setupKnob()
         view.tintColor = UIColor.red
         view.bringSubview(toFront: playPause)
-        updateLabel()
+        updateLabel(tempo: currentTempo)
     }
 
     override func didReceiveMemoryWarning() {
@@ -63,11 +70,11 @@ class ViewController: UIViewController, UITextFieldDelegate {
     
     
     
-    // MARK: setupTempoLabel
+    // MARK: setupTempoLabels
     func setupTempoLabels() {
-        tempoLabel.text = String(tempo)
+        tempoLabel.text = String(currentTempo)
         tempoLabel.font = UIFont(name: "OpenSans", size: 144.0)
-        tempoNameLabel.text = getTempoName(tempo: tempo)
+        tempoNameLabel.text = getTempoName(tempo: currentTempo)
         tempoNameLabel.font = UIFont(name: "OpenSans", size: 30.0)
     }
     
@@ -78,31 +85,37 @@ class ViewController: UIViewController, UITextFieldDelegate {
                 return name
             }
         }
-        return ""
+        return "" // if this function fails, return empty string
     }
+    
+    
     
     // MARK: setupKnob
     func setupKnob() {
         knob = Knob(frame: knobPlaceholder.bounds)
         knob.minimumValue = Float(TempoConstants.minimumTempo)
         knob.maximumValue = Float(TempoConstants.maximumTempo)
-        knob.startAngle = -CGFloat(CGFloat.pi * 7.0 / 5.0);
-        knob.endAngle = CGFloat(CGFloat.pi * 2.0 / 5.0);
-        knob.value = Float(tempo)
+        knob.value = Float(currentTempo)
 
-        knob.lineWidth = 8.0
-        knob.pointerLength = 32.0
+        knob.startAngle = VisualConstants.startAngle
+        knob.endAngle = VisualConstants.endAngle
+        knob.lineWidth = CGFloat(VisualConstants.lineWidth)
+        knob.pointerLength = CGFloat(VisualConstants.pointerLength)
         knob.addTarget(self, action: #selector(self.knobValueChanged), for: .valueChanged)
         knobPlaceholder.addSubview(knob)
     }
-
-    // MARK: updateLabel
-    @objc func updateLabel() {
-        var newTempo = getClosestTempo(inputTempo: tempo)
-        tempoLabel.text = NumberFormatter.localizedString(from: NSNumber(value: newTempo), number: NumberFormatter.Style.none)
-        tempoNameLabel.text = getTempoName(tempo: newTempo)
-    }
     
+    
+    
+    // MARK: knobValueChanged
+    @objc func knobValueChanged(inputKnob: Knob) {
+        currentTempo = getClosestTempo(inputTempo: Int(inputKnob.value))
+        updateLabel(tempo: currentTempo)
+        if metronomeOn == 1 {
+            updateBeat(tempo: currentTempo)
+        }
+    }
+
     // MARK: getClosestTempo
     func getClosestTempo(inputTempo: Int) -> Int {
         var closestTempo = inputTempo
@@ -119,30 +132,19 @@ class ViewController: UIViewController, UITextFieldDelegate {
         return closestTempo
     }
     
-    
-    
-    // MARK: knobValueChanged
-    @objc func knobValueChanged(knob: Knob) {
-        tempo = Int(knob.value)
-        updateLabel()
-        if metronomeOn == 1 {
-            updateBeat()
-        }
+    // MARK: updateLabel
+    @objc func updateLabel(tempo: Int) {
+        tempoLabel.text = NumberFormatter.localizedString(from: NSNumber(value: tempo), number: NumberFormatter.Style.none)
+        tempoNameLabel.text = getTempoName(tempo: tempo)
     }
+
+    
 
     // MARK: updateBeat
-    func updateBeat() {
+    func updateBeat(tempo: Int) {
         beatTimer.invalidate()
-        let timeIntervalDouble = getTimeInterval(tempo: tempoLabel.text!)
-        beatTimer = Timer.scheduledTimer(timeInterval: timeIntervalDouble, target: self, selector: #selector(self.playSound), userInfo: nil, repeats: true)
-    }
-
-    // MARK: getTimeInterval
-    func getTimeInterval(tempo: String) -> Double {
-        let bpm = Int(tempo)!
-        let timeInterval: Double = 60.0 / Double(bpm)
-        // Debug: print("Tempo:", tempo, " BPM:", bpm, " Interval:", timeInterval)
-        return timeInterval
+        let timeInterval: Double = 60.0 / Double(tempo)
+        beatTimer = Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: #selector(self.playSound), userInfo: nil, repeats: true)
     }
     
     // MARK: playSound
@@ -173,7 +175,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
             metronomeOn = 1
             sender.setImage(UIImage(named:"Pause_White"),for: .normal)
             playSound() // Play first sound before changing to use the timer
-            updateBeat()
+            updateBeat(tempo: currentTempo)
         } else {
             metronomeOn = 0
             sender.setImage(UIImage(named:"Play_White"),for: .normal)

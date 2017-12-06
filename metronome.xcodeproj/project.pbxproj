@@ -87,15 +87,15 @@
 		139ADF291FD6067700D103C0 /* metronome */ = {
 			isa = PBXGroup;
 			children = (
-				139ADF521FD651F100D103C0 /* Sounds */,
-				139ADF4D1FD6494300D103C0 /* Images */,
-				139ADF4A1FD644AA00D103C0 /* OpenSans-Regular.ttf */,
 				139ADF2A1FD6067700D103C0 /* AppDelegate.swift */,
-				139ADF2C1FD6067700D103C0 /* ViewController.swift */,
 				139ADF591FD66D5100D103C0 /* Knob.swift */,
+				139ADF2C1FD6067700D103C0 /* ViewController.swift */,
 				139ADF2E1FD6067700D103C0 /* Main.storyboard */,
 				139ADF311FD6067700D103C0 /* Assets.xcassets */,
+				139ADF4D1FD6494300D103C0 /* Images */,
+				139ADF521FD651F100D103C0 /* Sounds */,
 				139ADF331FD6067700D103C0 /* LaunchScreen.storyboard */,
+				139ADF4A1FD644AA00D103C0 /* OpenSans-Regular.ttf */,
 				139ADF361FD6067700D103C0 /* Info.plist */,
 			);
 			path = metronome;
