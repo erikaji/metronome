@@ -10,7 +10,6 @@
 		139ADF2B1FD6067700D103C0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 139ADF2A1FD6067700D103C0 /* AppDelegate.swift */; };
 		139ADF2D1FD6067700D103C0 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 139ADF2C1FD6067700D103C0 /* ViewController.swift */; };
 		139ADF301FD6067700D103C0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 139ADF2E1FD6067700D103C0 /* Main.storyboard */; };
-		139ADF321FD6067700D103C0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 139ADF311FD6067700D103C0 /* Assets.xcassets */; };
 		139ADF351FD6067700D103C0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 139ADF331FD6067700D103C0 /* LaunchScreen.storyboard */; };
 		139ADF401FD6067700D103C0 /* metronomeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 139ADF3F1FD6067700D103C0 /* metronomeTests.swift */; };
 		139ADF4B1FD644AA00D103C0 /* OpenSans-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 139ADF4A1FD644AA00D103C0 /* OpenSans-Regular.ttf */; };
@@ -18,6 +17,7 @@
 		139ADF571FD66B4400D103C0 /* Pause_White.png in Resources */ = {isa = PBXBuildFile; fileRef = 139ADF551FD66B4400D103C0 /* Pause_White.png */; };
 		139ADF581FD66B4400D103C0 /* Play_White.png in Resources */ = {isa = PBXBuildFile; fileRef = 139ADF561FD66B4400D103C0 /* Play_White.png */; };
 		139ADF5A1FD66D5100D103C0 /* Knob.swift in Sources */ = {isa = PBXBuildFile; fileRef = 139ADF591FD66D5100D103C0 /* Knob.swift */; };
+		139ADF5C1FD8D3CF00D103C0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 139ADF5B1FD8D3CF00D103C0 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,7 +35,6 @@
 		139ADF2A1FD6067700D103C0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		139ADF2C1FD6067700D103C0 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		139ADF2F1FD6067700D103C0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
-		139ADF311FD6067700D103C0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		139ADF341FD6067700D103C0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		139ADF361FD6067700D103C0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		139ADF3B1FD6067700D103C0 /* metronomeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = metronomeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -46,6 +45,7 @@
 		139ADF551FD66B4400D103C0 /* Pause_White.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Pause_White.png; sourceTree = "<group>"; };
 		139ADF561FD66B4400D103C0 /* Play_White.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Play_White.png; sourceTree = "<group>"; };
 		139ADF591FD66D5100D103C0 /* Knob.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Knob.swift; sourceTree = "<group>"; };
+		139ADF5B1FD8D3CF00D103C0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -91,7 +91,7 @@
 				139ADF591FD66D5100D103C0 /* Knob.swift */,
 				139ADF2C1FD6067700D103C0 /* ViewController.swift */,
 				139ADF2E1FD6067700D103C0 /* Main.storyboard */,
-				139ADF311FD6067700D103C0 /* Assets.xcassets */,
+				139ADF5B1FD8D3CF00D103C0 /* Assets.xcassets */,
 				139ADF4D1FD6494300D103C0 /* Images */,
 				139ADF521FD651F100D103C0 /* Sounds */,
 				139ADF331FD6067700D103C0 /* LaunchScreen.storyboard */,
@@ -218,8 +218,8 @@
 				139ADF571FD66B4400D103C0 /* Pause_White.png in Resources */,
 				139ADF351FD6067700D103C0 /* LaunchScreen.storyboard in Resources */,
 				139ADF541FD651FA00D103C0 /* Woodblock.wav in Resources */,
-				139ADF321FD6067700D103C0 /* Assets.xcassets in Resources */,
 				139ADF4B1FD644AA00D103C0 /* OpenSans-Regular.ttf in Resources */,
+				139ADF5C1FD8D3CF00D103C0 /* Assets.xcassets in Resources */,
 				139ADF301FD6067700D103C0 /* Main.storyboard in Resources */,
 				139ADF581FD66B4400D103C0 /* Play_White.png in Resources */,
 			);
