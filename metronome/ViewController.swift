@@ -32,7 +32,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
         static let startAngle = -CGFloat(CGFloat.pi * 6.0 / 5.0)
         static let endAngle = CGFloat(CGFloat.pi * 1.0 / 5.0)
         static let lineWidth = 18.0
-        static let lineColor = UIColor(red: 0, green: 0.3, blue: 0.5, alpha: 1.0)
+        static let lineColor = UIColor(red: 0, green: 0.42, blue: 0.7, alpha: 1.0)
         static let circularPointer = true
         static let pointerRadius = lineWidth / 2.0 - 2.0
     }
@@ -138,17 +138,17 @@ class ViewController: UIViewController, UITextFieldDelegate {
     
     // MARK: knobValueChanged
     @objc func knobValueChanged(inputKnob: Knob) {
-        currentTempoIndex = Int(round(inputKnob.value))
-        if currentTempoIndex > TempoConstants.maximumTempoIndex {
-            currentTempoIndex = TempoConstants.maximumTempoIndex
+        let newTempoIndex = Int(round(inputKnob.value))
+        if currentTempoIndex != newTempoIndex { // only make changes when truly needed
+            currentTempoIndex = newTempoIndex
+            let currentTempo = tempoValues[currentTempoIndex]
+            updateLabel(tempoIndex: currentTempoIndex)
+            if metronomeOn == 1 {
+                updateBeat(tempo: currentTempo)
+                updatePendulum(tempo: currentTempo)
+            }
+            knob.value = Float(currentTempoIndex)
         }
-        let currentTempo = tempoValues[currentTempoIndex]
-        updateLabel(tempoIndex: currentTempoIndex)
-        if metronomeOn == 1 {
-            updateBeat(tempo: currentTempo)
-            updatePendulum(tempo: currentTempo)
-        }
-        knob.value = Float(currentTempoIndex)
     }
 
     // MARK: updateLabel
@@ -163,6 +163,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
     // MARK: updateBeat
     func updateBeat(tempo: Int) {
         beatTimer.invalidate()
+        playSound()
         let timeInterval: Double = 60.0 / Double(tempo) // 60 sec/min * 1 min/tempo beats = # secs/beat
         beatTimer = Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: #selector(self.playSound), userInfo: nil, repeats: true)
     }
@@ -192,8 +193,9 @@ class ViewController: UIViewController, UITextFieldDelegate {
         // Definitions
         let endX = pendulumPlaceholder.bounds.maxX - CGFloat(2.0 * VisualConstants.pointerRadius) - 2
         let timeInterval: Double = 60.0 / Double(tempo) // 60 sec/min * 1 min/tempo beats = # secs/beat
+        
         let moveToRight = CABasicAnimation(keyPath: "position")
-        moveToRight.fromValue = [0,0]
+        moveToRight.fromValue = [0, 0]
         moveToRight.toValue = [endX, 0]
         moveToRight.duration = timeInterval
         moveToRight.beginTime = 0
@@ -209,7 +211,19 @@ class ViewController: UIViewController, UITextFieldDelegate {
         backAndForth.duration = moveToRight.duration + moveToLeft.duration
         backAndForth.repeatCount = Float.infinity
         
-        pendulumBobLayer.add(backAndForth, forKey: nil)
+        pendulumBobLayer.add(backAndForth, forKey: "backAndForth")
+    }
+    
+    // MARK: pausePendulum
+    func pausePendulum() {
+        let pausedTime = pendulumBobLayer.convertTime(CACurrentMediaTime(), from: nil)
+        pendulumBobLayer.speed = 0.0
+        pendulumBobLayer.timeOffset = pausedTime
+    }
+    
+    // MARK: restartPendulum
+    func restartPendulum() {
+        pendulumBobLayer.speed = 1.0
     }
     
     
@@ -219,15 +233,15 @@ class ViewController: UIViewController, UITextFieldDelegate {
         if metronomeOn == 0 {
             metronomeOn = 1
             sender.setImage(UIImage(named:"Pause_White"),for: .normal)
-            playSound() // Play first sound before changing to use the timer
             let currentTempo = tempoValues[currentTempoIndex]
             updateBeat(tempo: currentTempo)
             updatePendulum(tempo: currentTempo)
+            restartPendulum()
         } else {
             metronomeOn = 0
             sender.setImage(UIImage(named:"Play_White"),for: .normal)
             beatTimer.invalidate()
-            pendulumBobLayer.removeAllAnimations()
+            pausePendulum()
         }
     }
 }
