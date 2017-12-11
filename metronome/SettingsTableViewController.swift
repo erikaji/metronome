@@ -15,6 +15,10 @@ class SettingsTableViewController: UITableViewController {
     let aboutNames = ["Developer", "Fonts", "Icons", "Sounds"]
     let aboutValues = ["Erika Ji", "Open Sans, Varela Round", "Icons8", "Freesounds, Logic, Seiko"]
     
+    var metronomeOn: Bool?
+
+    
+    
     // MARK: Core
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -84,6 +88,11 @@ class SettingsTableViewController: UITableViewController {
             if let cell = tableView.cellForRow(at: indexPath as IndexPath) {
                 UserDefaults.standard.set (indexPath.row, forKey: "tone")
                 cell.accessoryType = .checkmark
+                if metronomeOn! {
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateBeatNotification"), object: nil)
+                } else {
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "playOneSoundNotification"), object: nil)
+                }
             }
         case 1:
             // keep real row selection marked

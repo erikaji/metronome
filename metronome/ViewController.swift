@@ -61,7 +61,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
     var beatTimer = Timer()
 
     // Initialize
-    var metronomeOn = 0
+    var metronomeOn = false
     var currentTempoIndex = TempoConstants.startingTempoIndex
     var currentToneIndex = ToneConstants.startingToneIndex
     var currentToneName = ToneConstants.toneNames[ToneConstants.startingToneIndex]
@@ -83,6 +83,8 @@ class ViewController: UIViewController, UITextFieldDelegate {
         view.bringSubview(toFront: playPause)
         updateLabel(tempoIndex: currentTempoIndex)
         UserDefaults.standard.set (currentToneIndex, forKey: "tone")
+        NotificationCenter.default.addObserver(self, selector: #selector(self.updateBeat), name:NSNotification.Name(rawValue: "updateBeatNotification"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.playOneSound), name:NSNotification.Name(rawValue: "playOneSoundNotification"), object: nil)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -166,8 +168,8 @@ class ViewController: UIViewController, UITextFieldDelegate {
             currentTempoIndex = newTempoIndex
             let currentTempo = tempoValues[currentTempoIndex]
             updateLabel(tempoIndex: currentTempoIndex)
-            if metronomeOn == 1 {
-                updateBeat(tempo: currentTempo)
+            if metronomeOn == true {
+                updateBeat()
                 updatePendulum(tempo: currentTempo)
             }
             knob.value = Float(currentTempoIndex)
@@ -184,13 +186,22 @@ class ViewController: UIViewController, UITextFieldDelegate {
     
     
     // MARK: updateBeat
-    func updateBeat(tempo: Int) {
+    @objc func updateBeat() {
         beatTimer.invalidate()
         currentToneIndex = UserDefaults.standard.integer(forKey: "tone")
         currentToneName = ToneConstants.toneNames[currentToneIndex]
         playSound()
-        let timeInterval: Double = 60.0 / Double(tempo) // 60 sec/min * 1 min/tempo beats = # secs/beat
+        let currentTempo = tempoValues[currentTempoIndex]
+        let timeInterval: Double = 60.0 / Double(currentTempo) // 60 sec/min * 1 min/tempo beats = # secs/beat
         beatTimer = Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: #selector(self.playSound), userInfo: nil, repeats: true)
+    }
+    
+    // MARK: playOneSound
+    @objc func playOneSound() {
+        beatTimer.invalidate()
+        currentToneIndex = UserDefaults.standard.integer(forKey: "tone")
+        currentToneName = ToneConstants.toneNames[currentToneIndex]
+        playSound()
     }
     
     // MARK: playSound
@@ -255,26 +266,24 @@ class ViewController: UIViewController, UITextFieldDelegate {
     
     // MARK: Actions
     @IBAction func playPauseButton(_ sender: UIButton) {
-        if metronomeOn == 0 {
-            metronomeOn = 1
+        if metronomeOn == false {
+            metronomeOn = true
             sender.setImage(UIImage(named:"Pause_White"),for: .normal)
             let currentTempo = tempoValues[currentTempoIndex]
-            updateBeat(tempo: currentTempo)
+            updateBeat()
             updatePendulum(tempo: currentTempo)
             restartPendulum()
         } else {
-            metronomeOn = 0
+            metronomeOn = false
             sender.setImage(UIImage(named:"Play_White"),for: .normal)
             beatTimer.invalidate()
             pausePendulum()
         }
     }
     
-    /*
-    @IBAction func settingsButton(_ sender: Any) {
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let destinationViewController = segue.destination as? SettingsTableViewController {
+            destinationViewController.metronomeOn = metronomeOn
+        }
     }
-    @IBAction func exitSettings(_ sender: Any) {
-        dismiss(animated: true, completion: nil)
-    }
-    */
 }
