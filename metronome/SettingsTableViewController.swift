@@ -18,8 +18,7 @@ class SettingsTableViewController: UITableViewController {
     // MARK: Core
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
-        //self.tableView.register(SettingsAboutTableViewCell.self, forCellReuseIdentifier: "aboutcell")
+        self.tableView.rowHeight = 45 // gets rid of error
         // Do any additional setup after loading the view.
     }
 
@@ -47,8 +46,8 @@ class SettingsTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch indexPath.section {
         case 0:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-            cell.textLabel?.text = tones[indexPath.row]
+            let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath) as! SettingsTonesTableViewCell
+            cell.tonesLabel.text = tones[indexPath.row]
             cell.selectionStyle = UITableViewCellSelectionStyle.none
             // accurately mark current setting as checked
             let currentToneIndex = UserDefaults.standard.integer(forKey: "tone")
