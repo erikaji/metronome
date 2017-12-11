@@ -11,6 +11,7 @@
 		131118C01FDBCF1700949D38 /* Woodblock (Low).wav in Resources */ = {isa = PBXBuildFile; fileRef = 131118BC1FDBCF1700949D38 /* Woodblock (Low).wav */; };
 		131118C21FDBCF1700949D38 /* Woodblock (High).wav in Resources */ = {isa = PBXBuildFile; fileRef = 131118BE1FDBCF1700949D38 /* Woodblock (High).wav */; };
 		131118C41FDBCFE700949D38 /* Seiko.wav in Resources */ = {isa = PBXBuildFile; fileRef = 131118C31FDBCFE700949D38 /* Seiko.wav */; };
+		1393AECA1FDEA20500892E3C /* SettingsAboutTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1393AEC91FDEA20500892E3C /* SettingsAboutTableViewCell.swift */; };
 		139ADF2B1FD6067700D103C0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 139ADF2A1FD6067700D103C0 /* AppDelegate.swift */; };
 		139ADF2D1FD6067700D103C0 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 139ADF2C1FD6067700D103C0 /* ViewController.swift */; };
 		139ADF301FD6067700D103C0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 139ADF2E1FD6067700D103C0 /* Main.storyboard */; };
@@ -23,6 +24,7 @@
 		139ADF5C1FD8D3CF00D103C0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 139ADF5B1FD8D3CF00D103C0 /* Assets.xcassets */; };
 		13A6AF7B1FDE62D300991E7C /* Back_Blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 13A6AF7A1FDE62D300991E7C /* Back_Blue.png */; };
 		13A6AF7D1FDE632B00991E7C /* Settings_Blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 13A6AF7C1FDE632B00991E7C /* Settings_Blue.png */; };
+		13A6AF881FDE7BB800991E7C /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13A6AF821FDE689900991E7C /* SettingsTableViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +42,7 @@
 		131118BC1FDBCF1700949D38 /* Woodblock (Low).wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "Woodblock (Low).wav"; sourceTree = "<group>"; };
 		131118BE1FDBCF1700949D38 /* Woodblock (High).wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "Woodblock (High).wav"; sourceTree = "<group>"; };
 		131118C31FDBCFE700949D38 /* Seiko.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Seiko.wav; sourceTree = "<group>"; };
+		1393AEC91FDEA20500892E3C /* SettingsAboutTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsAboutTableViewCell.swift; sourceTree = "<group>"; };
 		139ADF271FD6067700D103C0 /* metronome.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = metronome.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		139ADF2A1FD6067700D103C0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		139ADF2C1FD6067700D103C0 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -102,6 +105,7 @@
 				139ADF591FD66D5100D103C0 /* Knob.swift */,
 				139ADF2C1FD6067700D103C0 /* ViewController.swift */,
 				13A6AF821FDE689900991E7C /* SettingsTableViewController.swift */,
+				1393AEC91FDEA20500892E3C /* SettingsAboutTableViewCell.swift */,
 				139ADF2E1FD6067700D103C0 /* Main.storyboard */,
 				139ADF5B1FD8D3CF00D103C0 /* Assets.xcassets */,
 				139ADF4D1FD6494300D103C0 /* Images */,
@@ -261,6 +265,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				13A6AF881FDE7BB800991E7C /* SettingsTableViewController.swift in Sources */,
+				1393AECA1FDEA20500892E3C /* SettingsAboutTableViewCell.swift in Sources */,
 				139ADF2D1FD6067700D103C0 /* ViewController.swift in Sources */,
 				139ADF5A1FD66D5100D103C0 /* Knob.swift in Sources */,
 				139ADF2B1FD6067700D103C0 /* AppDelegate.swift in Sources */,

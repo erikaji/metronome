@@ -11,15 +11,15 @@ import UIKit
 class SettingsTableViewController: UITableViewController {
     // MARK: Constants
     let headers = ["Metronome Tones", "About"]
-    let sounds = ["Logic", "Seiko", "Woodblock (High)", "Woodblock (Low)"]
-    let about = ["Developer", "Fonts", "Icons", "Sounds"]
-    let currentSoundIndex = 3
+    let tones = ["Logic", "Seiko", "Woodblock (High)", "Woodblock (Low)"]
+    let aboutNames = ["Developer", "Fonts", "Icons", "Sounds"]
+    let aboutValues = ["Erika Ji", "Open Sans, Varela Round", "Icons8", "Freesounds, Logic, Seiko"]
     
     // MARK: Core
     override func viewDidLoad() {
         super.viewDidLoad()
         self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "cell")
-        self.tableView.register(UITableViewCell.self, forCellReuseIdentifier: "aboutcell")
+        //self.tableView.register(SettingsAboutTableViewCell.self, forCellReuseIdentifier: "aboutcell")
         // Do any additional setup after loading the view.
     }
 
@@ -36,9 +36,9 @@ class SettingsTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0:
-            return sounds.count
+            return tones.count
         case 1:
-            return about.count
+            return aboutNames.count
         default:
             return 0
         }
@@ -48,37 +48,49 @@ class SettingsTableViewController: UITableViewController {
         switch indexPath.section {
         case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: "cell", for: indexPath)
-            cell.textLabel?.text = sounds[indexPath.row]
-            if indexPath.row == currentSoundIndex {
+            cell.textLabel?.text = tones[indexPath.row]
+            cell.selectionStyle = UITableViewCellSelectionStyle.none
+            // accurately mark current setting as checked
+            let currentToneIndex = UserDefaults.standard.integer(forKey: "tone")
+            if indexPath.row == currentToneIndex {
                 cell.accessoryType = .checkmark
             }
+
             return cell
         case 1:
-            let cell = tableView.dequeueReusableCell(withIdentifier: "aboutcell", for: indexPath)
-            cell.textLabel?.text = about[indexPath.row]
+            let cell = tableView.dequeueReusableCell(withIdentifier: "aboutcell", for: indexPath) as! SettingsAboutTableViewCell
             cell.selectionStyle = UITableViewCellSelectionStyle.none
+
+            cell.aboutNameLabel.text = aboutNames[indexPath.row]
+            cell.aboutValueLabel.text = aboutValues[indexPath.row]
             return cell
         default:
             return UITableViewCell()
         }
     }
     
-    override func tableView(_ tableView: UITableView, willSelectRowAt indexPath: IndexPath) -> IndexPath? {
-        let selectedIndexPaths = indexPathsForSelectedRowsInSection(indexPath.section)
-        if selectedIndexPaths?.count == 1 {
-            tableView.deselectRowAtIndexPath(selectedIndexPaths!.first!, animated: true)
-        }
-        return indexPath
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return headers[section]
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.section {
         case 0:
-            if let cell = tableView.cellForRow(at: indexPath as IndexPath) {
-                cell.accessoryType = .checkmark
+            // uncheck other rows
+            for cell in self.tableView.visibleCells {
+                cell.accessoryType = .none
             }
             
+            // check the new row
+            if let cell = tableView.cellForRow(at: indexPath as IndexPath) {
+                UserDefaults.standard.set (indexPath.row, forKey: "tone")
+                cell.accessoryType = .checkmark
+            }
         case 1:
+            // keep real row selection marked
+            let currentToneIndex = UserDefaults.standard.integer(forKey: "tone")
+            let cell = tableView.cellForRow(at: IndexPath(item: currentToneIndex, section: 0))
+            cell?.accessoryType = .checkmark
             break
         default:
             break
@@ -88,6 +100,7 @@ class SettingsTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
         switch indexPath.section {
         case 0:
+            // deselect rows other than the row for the setting
             if let cell = tableView.cellForRow(at: indexPath as IndexPath) {
                 cell.accessoryType = .none
             }

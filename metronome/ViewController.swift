@@ -12,7 +12,6 @@ import AVFoundation
 class ViewController: UIViewController, UITextFieldDelegate {
     // MARK: Constants
     let tempoValues = [40, 42, 44, 46, 48, 50, 52, 54, 56, 58, 60, 63, 66, 69, 72, 76, 80, 84, 88, 92, 96, 100, 104, 108, 112, 116, 120, 126, 132, 138, 144, 152, 160, 168, 176, 184, 192, 200, 208]
-
     let tempoNames = ["Largo": [40, 42, 44, 46, 48, 50, 52, 54, 56, 58],
                       "Larghetto": [60, 63],
                       "Adagio": [66, 69, 72],
@@ -27,7 +26,6 @@ class ViewController: UIViewController, UITextFieldDelegate {
         static let startingTempoIndex = 19 // 92
         static let maximumTempoIndex = 38 // 208
     }
-    
     enum VisualConstants {
         static let startAngle = -CGFloat(CGFloat.pi * 6.0 / 5.0)
         static let endAngle = CGFloat(CGFloat.pi * 1.0 / 5.0)
@@ -35,6 +33,10 @@ class ViewController: UIViewController, UITextFieldDelegate {
         static let lineColor = UIColor(red: 0, green: 0.42, blue: 0.7, alpha: 1.0) // #006bb3
         static let circularPointer = true
         static let pointerRadius = lineWidth / 2.0 - 2.0
+    }
+    enum ToneConstants {
+        static let toneNames = ["Logic", "Seiko", "Woodblock (High)", "Woodblock (Low)"]
+        static let startingToneIndex = 3
     }
     
     
@@ -45,7 +47,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var knobPlaceholder: UIView!
     @IBOutlet weak var pendulumPlaceholder: UIView!
     @IBOutlet weak var playPause: UIButton!
-    @IBOutlet weak var settings: UIButton!
+    // @IBOutlet weak var settings: UIButton!
     
     // Knob
     var knob: Knob!
@@ -61,22 +63,26 @@ class ViewController: UIViewController, UITextFieldDelegate {
     // Initialize
     var metronomeOn = 0
     var currentTempoIndex = TempoConstants.startingTempoIndex
-    var soundName = "Woodblock (Low)"
+    var currentToneIndex = ToneConstants.startingToneIndex
+    var currentToneName = ToneConstants.toneNames[ToneConstants.startingToneIndex]
     
     
 
     // MARK: viewDidLoad()
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // Hide the navigation bar
         self.navigationController?.isNavigationBarHidden = true
         
-        // Setup
         setupTempoLabels()
         setupKnob()
         setupPendulum()
+        
         view.tintColor = VisualConstants.lineColor
         view.bringSubview(toFront: playPause)
         updateLabel(tempoIndex: currentTempoIndex)
+        UserDefaults.standard.set (currentToneIndex, forKey: "tone")
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -180,6 +186,8 @@ class ViewController: UIViewController, UITextFieldDelegate {
     // MARK: updateBeat
     func updateBeat(tempo: Int) {
         beatTimer.invalidate()
+        currentToneIndex = UserDefaults.standard.integer(forKey: "tone")
+        currentToneName = ToneConstants.toneNames[currentToneIndex]
         playSound()
         let timeInterval: Double = 60.0 / Double(tempo) // 60 sec/min * 1 min/tempo beats = # secs/beat
         beatTimer = Timer.scheduledTimer(timeInterval: timeInterval, target: self, selector: #selector(self.playSound), userInfo: nil, repeats: true)
@@ -188,7 +196,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
     // MARK: playSound
     @objc func playSound() {
         //  Metronome sound courtesy of Freesound.org
-        guard let url = Bundle.main.url(forResource: soundName, withExtension: "wav") else { return }
+        guard let url = Bundle.main.url(forResource: currentToneName, withExtension: "wav") else { return }
         do {
             try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
             try AVAudioSession.sharedInstance().setActive(true)
@@ -262,9 +270,11 @@ class ViewController: UIViewController, UITextFieldDelegate {
         }
     }
     
+    /*
     @IBAction func settingsButton(_ sender: Any) {
     }
     @IBAction func exitSettings(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
+    */
 }
