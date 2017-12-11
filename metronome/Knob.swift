@@ -4,7 +4,7 @@
 //
 //  Created by Erika Ji on 12/5/17.
 //  Copyright © 2017 Erika Ji. All rights reserved.
-//  This API is courtesy of Sam Davies and Mikael Konutgan at raywenderlich.com.
+//  The fundamentals of this API were created using the tutorials by Sam Davies and Mikael Konutgan at raywenderlich.com.
 //
 
 import UIKit

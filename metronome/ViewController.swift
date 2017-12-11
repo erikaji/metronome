@@ -32,7 +32,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
         static let startAngle = -CGFloat(CGFloat.pi * 6.0 / 5.0)
         static let endAngle = CGFloat(CGFloat.pi * 1.0 / 5.0)
         static let lineWidth = 18.0
-        static let lineColor = UIColor(red: 0, green: 0.42, blue: 0.7, alpha: 1.0)
+        static let lineColor = UIColor(red: 0, green: 0.42, blue: 0.7, alpha: 1.0) // #006bb3
         static let circularPointer = true
         static let pointerRadius = lineWidth / 2.0 - 2.0
     }
@@ -45,6 +45,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var knobPlaceholder: UIView!
     @IBOutlet weak var pendulumPlaceholder: UIView!
     @IBOutlet weak var playPause: UIButton!
+    @IBOutlet weak var settings: UIButton!
     
     // Knob
     var knob: Knob!
@@ -66,6 +67,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
     // MARK: viewDidLoad()
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationController?.isNavigationBarHidden = true
         
         // Setup
         setupTempoLabels()
@@ -76,6 +78,20 @@ class ViewController: UIViewController, UITextFieldDelegate {
         updateLabel(tempoIndex: currentTempoIndex)
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        // Hide the navigation bar on the this view controller
+        self.navigationController?.setNavigationBarHidden(true, animated: animated)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        // Show the navigation bar on other view controllers
+        self.navigationController?.setNavigationBarHidden(false, animated: animated)
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -243,5 +259,11 @@ class ViewController: UIViewController, UITextFieldDelegate {
             beatTimer.invalidate()
             pausePendulum()
         }
+    }
+    
+    @IBAction func settingsButton(_ sender: Any) {
+    }
+    @IBAction func exitSettings(_ sender: Any) {
+        dismiss(animated: true, completion: nil)
     }
 }

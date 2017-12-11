@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		131118BF1FDBCF1700949D38 /* Logic.wav in Resources */ = {isa = PBXBuildFile; fileRef = 131118BB1FDBCF1700949D38 /* Logic.wav */; };
+		131118C01FDBCF1700949D38 /* Woodblock Lower.wav in Resources */ = {isa = PBXBuildFile; fileRef = 131118BC1FDBCF1700949D38 /* Woodblock Lower.wav */; };
+		131118C21FDBCF1700949D38 /* Woodblock Higher.wav in Resources */ = {isa = PBXBuildFile; fileRef = 131118BE1FDBCF1700949D38 /* Woodblock Higher.wav */; };
+		131118C41FDBCFE700949D38 /* Seiko.wav in Resources */ = {isa = PBXBuildFile; fileRef = 131118C31FDBCFE700949D38 /* Seiko.wav */; };
 		139ADF2B1FD6067700D103C0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 139ADF2A1FD6067700D103C0 /* AppDelegate.swift */; };
 		139ADF2D1FD6067700D103C0 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 139ADF2C1FD6067700D103C0 /* ViewController.swift */; };
 		139ADF301FD6067700D103C0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 139ADF2E1FD6067700D103C0 /* Main.storyboard */; };
@@ -18,6 +22,10 @@
 		139ADF581FD66B4400D103C0 /* Play_White.png in Resources */ = {isa = PBXBuildFile; fileRef = 139ADF561FD66B4400D103C0 /* Play_White.png */; };
 		139ADF5A1FD66D5100D103C0 /* Knob.swift in Sources */ = {isa = PBXBuildFile; fileRef = 139ADF591FD66D5100D103C0 /* Knob.swift */; };
 		139ADF5C1FD8D3CF00D103C0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 139ADF5B1FD8D3CF00D103C0 /* Assets.xcassets */; };
+		13A6AF7B1FDE62D300991E7C /* Back_Blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 13A6AF7A1FDE62D300991E7C /* Back_Blue.png */; };
+		13A6AF7D1FDE632B00991E7C /* Settings_Blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 13A6AF7C1FDE632B00991E7C /* Settings_Blue.png */; };
+		13A6AF7F1FDE671A00991E7C /* SettingsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13A6AF7E1FDE671A00991E7C /* SettingsTableViewCell.swift */; };
+		13A6AF831FDE689900991E7C /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13A6AF821FDE689900991E7C /* SettingsViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -31,6 +39,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		131118BB1FDBCF1700949D38 /* Logic.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Logic.wav; sourceTree = "<group>"; };
+		131118BC1FDBCF1700949D38 /* Woodblock Lower.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "Woodblock Lower.wav"; sourceTree = "<group>"; };
+		131118BE1FDBCF1700949D38 /* Woodblock Higher.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "Woodblock Higher.wav"; sourceTree = "<group>"; };
+		131118C31FDBCFE700949D38 /* Seiko.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Seiko.wav; sourceTree = "<group>"; };
 		139ADF271FD6067700D103C0 /* metronome.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = metronome.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		139ADF2A1FD6067700D103C0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		139ADF2C1FD6067700D103C0 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -46,6 +58,10 @@
 		139ADF561FD66B4400D103C0 /* Play_White.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Play_White.png; sourceTree = "<group>"; };
 		139ADF591FD66D5100D103C0 /* Knob.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Knob.swift; sourceTree = "<group>"; };
 		139ADF5B1FD8D3CF00D103C0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		13A6AF7A1FDE62D300991E7C /* Back_Blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Back_Blue.png; sourceTree = "<group>"; };
+		13A6AF7C1FDE632B00991E7C /* Settings_Blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Settings_Blue.png; sourceTree = "<group>"; };
+		13A6AF7E1FDE671A00991E7C /* SettingsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewCell.swift; sourceTree = "<group>"; };
+		13A6AF821FDE689900991E7C /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,6 +106,8 @@
 				139ADF2A1FD6067700D103C0 /* AppDelegate.swift */,
 				139ADF591FD66D5100D103C0 /* Knob.swift */,
 				139ADF2C1FD6067700D103C0 /* ViewController.swift */,
+				13A6AF821FDE689900991E7C /* SettingsViewController.swift */,
+				13A6AF7E1FDE671A00991E7C /* SettingsTableViewCell.swift */,
 				139ADF2E1FD6067700D103C0 /* Main.storyboard */,
 				139ADF5B1FD8D3CF00D103C0 /* Assets.xcassets */,
 				139ADF4D1FD6494300D103C0 /* Images */,
@@ -113,8 +131,10 @@
 		139ADF4D1FD6494300D103C0 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				13A6AF7A1FDE62D300991E7C /* Back_Blue.png */,
 				139ADF551FD66B4400D103C0 /* Pause_White.png */,
 				139ADF561FD66B4400D103C0 /* Play_White.png */,
+				13A6AF7C1FDE632B00991E7C /* Settings_Blue.png */,
 			);
 			path = Images;
 			sourceTree = "<group>";
@@ -122,6 +142,10 @@
 		139ADF521FD651F100D103C0 /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
+				131118C31FDBCFE700949D38 /* Seiko.wav */,
+				131118BB1FDBCF1700949D38 /* Logic.wav */,
+				131118BE1FDBCF1700949D38 /* Woodblock Higher.wav */,
+				131118BC1FDBCF1700949D38 /* Woodblock Lower.wav */,
 				139ADF531FD651FA00D103C0 /* Woodblock.wav */,
 			);
 			path = Sounds;
@@ -216,11 +240,17 @@
 			buildActionMask = 2147483647;
 			files = (
 				139ADF571FD66B4400D103C0 /* Pause_White.png in Resources */,
+				13A6AF7B1FDE62D300991E7C /* Back_Blue.png in Resources */,
 				139ADF351FD6067700D103C0 /* LaunchScreen.storyboard in Resources */,
 				139ADF541FD651FA00D103C0 /* Woodblock.wav in Resources */,
+				131118C01FDBCF1700949D38 /* Woodblock Lower.wav in Resources */,
+				131118C21FDBCF1700949D38 /* Woodblock Higher.wav in Resources */,
+				131118BF1FDBCF1700949D38 /* Logic.wav in Resources */,
 				139ADF4B1FD644AA00D103C0 /* OpenSans-Regular.ttf in Resources */,
+				131118C41FDBCFE700949D38 /* Seiko.wav in Resources */,
 				139ADF5C1FD8D3CF00D103C0 /* Assets.xcassets in Resources */,
 				139ADF301FD6067700D103C0 /* Main.storyboard in Resources */,
+				13A6AF7D1FDE632B00991E7C /* Settings_Blue.png in Resources */,
 				139ADF581FD66B4400D103C0 /* Play_White.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -241,7 +271,9 @@
 			files = (
 				139ADF2D1FD6067700D103C0 /* ViewController.swift in Sources */,
 				139ADF5A1FD66D5100D103C0 /* Knob.swift in Sources */,
+				13A6AF7F1FDE671A00991E7C /* SettingsTableViewCell.swift in Sources */,
 				139ADF2B1FD6067700D103C0 /* AppDelegate.swift in Sources */,
+				13A6AF831FDE689900991E7C /* SettingsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
