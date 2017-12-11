@@ -61,6 +61,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
     // Initialize
     var metronomeOn = 0
     var currentTempoIndex = TempoConstants.startingTempoIndex
+    var soundName = "Woodblock (Low)"
     
     
 
@@ -187,7 +188,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
     // MARK: playSound
     @objc func playSound() {
         //  Metronome sound courtesy of Freesound.org
-        guard let url = Bundle.main.url(forResource: "Woodblock", withExtension: "wav") else { return }
+        guard let url = Bundle.main.url(forResource: soundName, withExtension: "wav") else { return }
         do {
             try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
             try AVAudioSession.sharedInstance().setActive(true)
