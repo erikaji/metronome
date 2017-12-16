@@ -4,7 +4,8 @@
 //
 //  Created by Erika Ji on 12/5/17.
 //  Copyright © 2017 Erika Ji. All rights reserved.
-//  The fundamentals of this API were created using the tutorials by Sam Davies and Mikael Konutgan
+//
+//  This Knob class extends the Knob class specified in a tutorial by Sam Davies and Mikael Konutgan
 //  (https://www.raywenderlich.com/82058/custom-control-tutorial-ios-swift-reusable-knob).
 //
 
@@ -24,13 +25,15 @@ public class Knob: UIControl {
         fatalError("init(coder:) has not been implemented")
     }
 
+    
+    
+    // MARK: Private Constants and Variables
     private let knobRenderer = KnobRenderer()
-    
-    
-    
-    // MARK: Variables
     private var backingValue: Float = 0.0
     
+    
+    
+    // MARK: Public Variables
     /** Contains the receiver’s current value. */
     public var value: Float {
         get { return backingValue }
@@ -111,24 +114,28 @@ public class Knob: UIControl {
         }
     }
     
-    func createSublayers() {
+    private func createSublayers() {
         knobRenderer.update(bounds: bounds)
+        
+        // Setup track
         knobRenderer.strokeColor = tintColor
-        knobRenderer.startAngle = -CGFloat(CGFloat.pi * 11.0 / 8.0);
-        knobRenderer.endAngle = CGFloat(CGFloat.pi * 3.0 / 8.0);
-        knobRenderer.pointerAngle = knobRenderer.startAngle;
+        knobRenderer.startAngle = -CGFloat(CGFloat.pi * 11.0 / 8.0)
+        knobRenderer.endAngle = CGFloat(CGFloat.pi * 3.0 / 8.0)
         knobRenderer.lineWidth = 2.0
+
+        // Setup pointer
         knobRenderer.circularPointer = false
         knobRenderer.pointerWidth = 2.0
         knobRenderer.pointerLength = 6.0
-        knobRenderer.pointerRadius = 3.0 // just in case
+        knobRenderer.pointerRadius = 3.0 // initialized just in case
+        knobRenderer.pointerAngle = knobRenderer.startAngle
         
         layer.addSublayer(knobRenderer.trackLayer)
         layer.addSublayer(knobRenderer.trackEndsLayer)
         layer.addSublayer(knobRenderer.pointerLayer)
     }
     
-    @objc func handleRotation(sender: AnyObject) {
+    @objc private func handleRotation(sender: AnyObject) {
         let gr = sender as! RotationGestureRecognizer
         
         // 1. Mid-point angle
@@ -185,7 +192,6 @@ private class KnobRenderer {
             trackEndsLayer.fillColor = strokeColor.cgColor
         }
     }
-    
     var startAngle: CGFloat = 0.0 {
         didSet { update() }
     }
@@ -195,6 +201,7 @@ private class KnobRenderer {
     var lineWidth: CGFloat = 1.0 {
         didSet { update() }
     }
+    
     var circularPointer: Bool = false {
         didSet { update() }
     }
@@ -207,16 +214,15 @@ private class KnobRenderer {
     var pointerRadius: CGFloat = 0.0 {
         didSet { update() }
     }
-    
-    let trackLayer = CAShapeLayer()
-    let trackEndsLayer = CAShapeLayer()
-    let pointerLayer = CAShapeLayer()
-    
     var backingPointerAngle: CGFloat = 0.0
     var pointerAngle: CGFloat {
         get { return backingPointerAngle }
         set { setPointerAngle(pointerAngle: newValue, animated: false) }
     }
+    
+    let trackLayer = CAShapeLayer()
+    let trackEndsLayer = CAShapeLayer()
+    let pointerLayer = CAShapeLayer()
     
     
     
@@ -248,9 +254,16 @@ private class KnobRenderer {
 
         // Create rounded track ends for round pointer
         if circularPointer {
-            let startRect = CGRect(x: trackLayer.bounds.width / 2.0 - (radius * sin(3 * CGFloat.pi / 2 - startAngle)) - trackLayer.lineWidth / 2.0, y: trackLayer.bounds.height / 2.0 - (radius * cos(3 * CGFloat.pi / 2 - startAngle)) - trackLayer.lineWidth / 2.0, width: trackLayer.lineWidth, height: trackLayer.lineWidth)
+            // Set coordinates
+            let startX = trackLayer.bounds.width / 2.0 - (radius * sin(3 * CGFloat.pi / 2 - startAngle)) - trackLayer.lineWidth / 2.0
+            let startY = trackLayer.bounds.height / 2.0 - (radius * cos(3 * CGFloat.pi / 2 - startAngle)) - trackLayer.lineWidth / 2.0
+            let endX = trackLayer.bounds.width / 2.0 + (radius * sin(CGFloat.pi / 2 - endAngle)) - trackLayer.lineWidth / 2.0
+            let endY = trackLayer.bounds.height / 2.0 + (radius * cos(CGFloat.pi / 2 - endAngle)) - trackLayer.lineWidth / 2.0
+            
+            // Draw shapes
+            let startRect = CGRect(x: startX, y: startY, width: trackLayer.lineWidth, height: trackLayer.lineWidth)
             let startPath = UIBezierPath(ovalIn:startRect)
-            let endRect = CGRect(x: trackLayer.bounds.width / 2.0 + (radius * sin(CGFloat.pi / 2 - endAngle)) - trackLayer.lineWidth / 2.0, y: trackLayer.bounds.height / 2.0 + (radius * cos(CGFloat.pi / 2 - endAngle)) - trackLayer.lineWidth / 2.0, width: trackLayer.lineWidth, height: trackLayer.lineWidth)
+            let endRect = CGRect(x: endX, y: endY, width: trackLayer.lineWidth, height: trackLayer.lineWidth)
             let endPath = UIBezierPath(ovalIn:endRect)
             startPath.append(endPath)
             trackEndsLayer.path = startPath.cgPath
@@ -290,6 +303,8 @@ private class KnobRenderer {
         update()
     }
 }
+
+
 
 private class RotationGestureRecognizer: UIPanGestureRecognizer {
     // MARK: Initialization

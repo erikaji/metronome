@@ -9,9 +9,9 @@
 import UIKit
 
 class SettingsTableViewController: UITableViewController {
-    // MARK: Constants
+    // MARK: Constants & Variables
     let headers = ["Metronome Tones", "About"]
-    let tones = ["Logic", "Seiko", "Woodblock (High)", "Woodblock (Low)"]
+    let tones = ViewController.ToneConstants.toneNames
     let aboutNames = ["Developer", "Fonts", "Icons", "Sounds"]
     let aboutValues = ["Erika Ji", "Open Sans, Varela Round", "Icons8", "Freesounds, Logic, Seiko"]
     
@@ -31,9 +31,15 @@ class SettingsTableViewController: UITableViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    
+    
     // MARK: Functions
     override func numberOfSections(in tableView: UITableView) -> Int {
         return headers.count
+    }
+    
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return headers[section]
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -72,10 +78,6 @@ class SettingsTableViewController: UITableViewController {
         }
     }
     
-    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return headers[section]
-    }
-    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.section {
         case 0:
@@ -99,7 +101,6 @@ class SettingsTableViewController: UITableViewController {
             let currentToneIndex = UserDefaults.standard.integer(forKey: "tone")
             let cell = tableView.cellForRow(at: IndexPath(item: currentToneIndex, section: 0))
             cell?.accessoryType = .checkmark
-            break
         default:
             break
         }
