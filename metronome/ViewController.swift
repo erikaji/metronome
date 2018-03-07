@@ -73,6 +73,14 @@ class ViewController: UIViewController, UITextFieldDelegate {
     var currentTempoIndex = TempoConstants.startingTempoIndex
     var currentToneIndex = ToneConstants.startingToneIndex
     
+    // Thread
+    var timebaseInfo = mach_timebase_info_data_t()
+    var thread_id: thread_port_t = 0
+    var thread: Thread?
+    
+    // TEMP STUFF
+    var lastValue = 0.0
+    
     
 
     // MARK: Core
@@ -193,17 +201,22 @@ class ViewController: UIViewController, UITextFieldDelegate {
     // MARK: updateBeat
     @objc func updateBeat() {
         beatTimer.suspend()
+        if thread != nil { thread!.cancel() }
         currentToneIndex = UserDefaults.standard.integer(forKey: "tone") // update tone
     
         let currentTempo = tempoValues[currentTempoIndex]
         // 60 seconds/min * 1 min/(n beats) * 1,000 milliseconds/second = # milliseconds/beat
-        let timeInterval: Int = Int(60.0 / Double(currentTempo) * 1000.0)
-            
-        beatTimer.timer.schedule(deadline: .now(), repeating: .milliseconds(timeInterval))
+        // let timeInterval: Int = Int(60.0 / Double(currentTempo) * 1000.0)
+        let timeInterval: Double = 60.0 / Double(currentTempo)
+        
+        /*beatTimer.timer.schedule(deadline: .now(), repeating: .milliseconds(timeInterval))
         beatTimer.timer.setEventHandler(handler: { [weak self] in
                 self?.playSound()
             })
-        beatTimer.resume()
+        beatTimer.resume() */
+        /* TEMP */
+        startMachTimer(seconds: timeInterval)
+        
     }
     
     // MARK: playOneSound
@@ -215,9 +228,15 @@ class ViewController: UIViewController, UITextFieldDelegate {
     
     // MARK: playSound
     @objc func playSound() {
+        /* TEMP */
+        let currentTime = Date().timeIntervalSince1970
+        // print ("ACCURATE:",currentTime-lastValue) // this IS accurate
+        lastValue = currentTime
+        
         let currentToneName = ToneConstants.toneNames[currentToneIndex]
         guard let url = Bundle.main.url(forResource: currentToneName, withExtension: "wav") else { return }
         do {
+            print("START:",Date().timeIntervalSince1970-lastValue) // this IS accurate
             try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
             try AVAudioSession.sharedInstance().setActive(true)
             
@@ -227,7 +246,9 @@ class ViewController: UIViewController, UITextFieldDelegate {
              player = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileTypeMPEGLayer3) */
             
             guard let player = player else { return }
+            print("REALSTART:",Date().timeIntervalSince1970-lastValue)
             player.play()
+            print("END:",Date().timeIntervalSince1970-lastValue)
         } catch let error {
             print(error.localizedDescription)
         }
@@ -274,6 +295,56 @@ class ViewController: UIViewController, UITextFieldDelegate {
         pendulumBobLayer.speed = 1.0
     }
     
+    
+    
+    // MARK: MachTimer
+    func startMachTimer(seconds: Double) {
+        Thread.detachNewThread {
+            autoreleasepool {
+                self.configureThread()
+                self.thread = Thread.current
+                print(Thread.current)
+                var when = mach_absolute_time()
+                repeat {
+                    when += self.nanosToAbs(UInt64(seconds * Double(NSEC_PER_SEC))) // how long to wait
+                    mach_wait_until(when)
+                    if !self.metronomeOn { break } // prevents lagging sound
+                    if Thread.current.isCancelled { break }
+                    self.playSound()
+                } while(self.metronomeOn)
+            }
+        }
+    }
+    
+    func configureThread() {
+        mach_timebase_info(&timebaseInfo)
+        
+        let clock2abs = Double(timebaseInfo.denom) / Double(timebaseInfo.numer) * Double(NSEC_PER_SEC)
+        var policy = thread_time_constraint_policy()
+        policy.period      = UInt32(0.00 * clock2abs)
+        policy.computation = UInt32(0.03 * clock2abs) // 30 ms of work
+        policy.constraint  = UInt32(0.05 * clock2abs)
+        policy.preemptible = 0
+        
+        thread_id = pthread_mach_thread_np(pthread_self())
+        let THREAD_TIME_CONSTRAINT_POLICY_COUNT = mach_msg_type_number_t(MemoryLayout<thread_time_constraint_policy>.size / MemoryLayout<integer_t>.size)
+        
+        let ret: Int32 = withUnsafeMutablePointer(to: &policy) {
+            $0.withMemoryRebound(to: integer_t.self, capacity: Int(THREAD_TIME_CONSTRAINT_POLICY_COUNT)) {
+                thread_policy_set(thread_id, UInt32(THREAD_TIME_CONSTRAINT_POLICY), $0, THREAD_TIME_CONSTRAINT_POLICY_COUNT)
+            }
+        }
+        
+        if ret != KERN_SUCCESS {
+            mach_error("thread_policy_set:", ret)
+            exit(1)
+        }
+    }
+    
+    func nanosToAbs(_ nanos: UInt64) -> UInt64 {
+        return nanos * UInt64(timebaseInfo.denom) / UInt64(timebaseInfo.numer)
+    }
+// might still need to use coreaudio / avfoundation
     
     
     // MARK: Actions
