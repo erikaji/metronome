@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AudioToolbox
 import AVFoundation
 
 class ViewController: UIViewController, UITextFieldDelegate {
@@ -65,7 +66,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
     var pendulumBobLayer = CAShapeLayer()
     
     // Player
-    var player: AVAudioPlayer?
+    // var player: AVAudioPlayer?
     var beatTimer = RepeatingTimer()
     
     // Status
@@ -80,6 +81,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
     
     // TEMP STUFF
     var lastValue = 0.0
+    var sound: SystemSoundID = 0
     
     
 
@@ -92,6 +94,18 @@ class ViewController: UIViewController, UITextFieldDelegate {
         setupKnob()
         setupPendulum()
         UserDefaults.standard.set(currentToneIndex, forKey: "tone")
+        
+        // TEMP
+        let url = NSURL(fileURLWithPath: Bundle.main.path(forResource: "Logic" , ofType: "caf")!)
+        AudioServicesCreateSystemSoundID(url, &self.sound)
+
+        /** guide **/
+        
+        print(self)
+        print(self.sound)
+        AudioServicesPlaySystemSoundWithCompletion(self.sound) {
+           // AudioServicesDisposeSystemSoundID(self.sound)
+        }
         
         // Allow the settings page to trigger beat changes
         NotificationCenter.default.addObserver(self, selector: #selector(self.updateBeat), name:NSNotification.Name(rawValue: "updateBeatNotification"), object: nil)
@@ -205,18 +219,8 @@ class ViewController: UIViewController, UITextFieldDelegate {
         currentToneIndex = UserDefaults.standard.integer(forKey: "tone") // update tone
     
         let currentTempo = tempoValues[currentTempoIndex]
-        // 60 seconds/min * 1 min/(n beats) * 1,000 milliseconds/second = # milliseconds/beat
-        // let timeInterval: Int = Int(60.0 / Double(currentTempo) * 1000.0)
         let timeInterval: Double = 60.0 / Double(currentTempo)
-        
-        /*beatTimer.timer.schedule(deadline: .now(), repeating: .milliseconds(timeInterval))
-        beatTimer.timer.setEventHandler(handler: { [weak self] in
-                self?.playSound()
-            })
-        beatTimer.resume() */
-        /* TEMP */
         startMachTimer(seconds: timeInterval)
-        
     }
     
     // MARK: playOneSound
@@ -230,28 +234,37 @@ class ViewController: UIViewController, UITextFieldDelegate {
     @objc func playSound() {
         /* TEMP */
         let currentTime = Date().timeIntervalSince1970
-        // print ("ACCURATE:",currentTime-lastValue) // this IS accurate
+            // this value is accurately distant from what comes before it
         lastValue = currentTime
         
-        let currentToneName = ToneConstants.toneNames[currentToneIndex]
-        guard let url = Bundle.main.url(forResource: currentToneName, withExtension: "wav") else { return }
-        do {
-            print("START:",Date().timeIntervalSince1970-lastValue) // this IS accurate
+        // let currentToneName = ToneConstants.toneNames[currentToneIndex]
+        // guard let url = Bundle.main.url(forResource: currentToneName, withExtension: "caf") else { return }
+        /*do {
             try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
             try AVAudioSession.sharedInstance().setActive(true)
+            try AVAudioSession.sharedInstance().setPreferredIOBufferDuration(0.005)*/
+            
+            /*let url = NSURL(fileURLWithPath: Bundle.main.path(forResource: "Logic" , ofType: "caf")!)
+            AudioServicesCreateSystemSoundID(url, &self.sound)
+            //print(self)
+            //print(self.sound)
+            AudioServicesPlaySystemSoundWithCompletion(self.sound) {
+              AudioServicesDisposeSystemSoundID(self.sound)
+            }*/
             
             /* The following line is required for the player to work on iOS 11. Change the file type accordingly*/
-            player = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileType.wav.rawValue)
+            // player = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileType.caf.rawValue)
             /* iOS 10 and earlier require the following line:
              player = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileTypeMPEGLayer3) */
             
-            guard let player = player else { return }
-            print("REALSTART:",Date().timeIntervalSince1970-lastValue)
-            player.play()
-            print("END:",Date().timeIntervalSince1970-lastValue)
-        } catch let error {
-            print(error.localizedDescription)
-        }
+            // print("BP3:",Date().timeIntervalSince1970-lastValue) // much more variance here
+            // guard let player = player else { return }
+            // print("REALSTART:",Date().timeIntervalSince1970-lastValue) // very little difference from the statement above
+            // player.play()
+            print("END:",Date().timeIntervalSince1970-lastValue) // usually .02s, but this seems to be the main culprit for when bg mode is activated
+        /*} catch let error {
+           print(error.localizedDescription)
+        }*/
     }
     
     
@@ -344,7 +357,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
     func nanosToAbs(_ nanos: UInt64) -> UInt64 {
         return nanos * UInt64(timebaseInfo.denom) / UInt64(timebaseInfo.numer)
     }
-// might still need to use coreaudio / avfoundation
+    
     
     
     // MARK: Actions
