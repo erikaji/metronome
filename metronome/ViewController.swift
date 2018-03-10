@@ -7,7 +7,7 @@
 //
 
 import UIKit
-import AudioToolbox
+import AudioKit
 import AVFoundation
 
 class ViewController: UIViewController, UITextFieldDelegate {
@@ -24,7 +24,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
                       "Allegro": [120, 126, 132, 138, 144, 152, 160, 168],
                       "Presto": [176, 184, 192, 200],
                       "Prestissimo": [208]]
-
+    
     enum TempoConstants {
         static let minimumTempoIndex = 0    // bpm =  40
         static let startingTempoIndex = 19  // bpm =  92
@@ -60,31 +60,28 @@ class ViewController: UIViewController, UITextFieldDelegate {
     
     // Knob
     var knob: Knob!
-
+    
     // Pendulum
     var pendulumTrackLayer = CAShapeLayer()
     var pendulumBobLayer = CAShapeLayer()
-    
-    // Player
-    // var player: AVAudioPlayer?
-    var beatTimer = RepeatingTimer()
     
     // Status
     var metronomeOn = false
     var currentTempoIndex = TempoConstants.startingTempoIndex
     var currentToneIndex = ToneConstants.startingToneIndex
     
-    // Thread
+    // Metronome, courtesy of AudioKit
+    var metronome = AKSamplerMetronome()
+    var mixer = AKMixer()
+    
+    // Thread - REMOVE
     var timebaseInfo = mach_timebase_info_data_t()
     var thread_id: thread_port_t = 0
     var thread: Thread?
-    
-    // TEMP STUFF
     var lastValue = 0.0
-    var sound: SystemSoundID = 0
     
     
-
+    
     // MARK: Core
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -95,16 +92,31 @@ class ViewController: UIViewController, UITextFieldDelegate {
         setupPendulum()
         UserDefaults.standard.set(currentToneIndex, forKey: "tone")
         
-        // TEMP
-        let url = NSURL(fileURLWithPath: Bundle.main.path(forResource: "Logic" , ofType: "caf")!)
-        AudioServicesCreateSystemSoundID(url, &self.sound)
-
-        /** guide **/
+        // Setup Metronome
+        let currentToneName = ToneConstants.toneNames[currentToneIndex]
+        guard let soundUrl = Bundle.main.url(forResource: currentToneName, withExtension: "caf")
+            else {
+                print("Error: unable to retrieve the default metronome tone.")
+                fatalError()
+        }
+        metronome.sound = soundUrl
+        metronome >>> mixer
+        mixer.volume = 1.0
+        AudioKit.output = mixer
         
-        print(self)
-        print(self.sound)
-        AudioServicesPlaySystemSoundWithCompletion(self.sound) {
-           // AudioServicesDisposeSystemSoundID(self.sound)
+        // Enable background playback
+        do {
+            try AKSettings.setSession(category: .playback, with: .mixWithOthers)
+            AKSettings.playbackWhileMuted = true
+        } catch {
+            print("Error: unable to enable background playback.")
+        }
+        
+        // Start Metronome
+        do {
+            try AudioKit.start()
+        } catch {
+            AKLog("AudioKit did not start!")
         }
         
         // Allow the settings page to trigger beat changes
@@ -130,7 +142,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
+
     
     
     // MARK: setupTempoLabels
@@ -179,7 +191,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
         view.tintColor = VisualConstants.lineColor
         view.bringSubview(toFront: playPause)
     }
-
+    
     // MARK: setupPendulum
     func setupPendulum() {
         // Setup track
@@ -209,64 +221,48 @@ class ViewController: UIViewController, UITextFieldDelegate {
             knob.value = Float(currentTempoIndex)
         }
     }
-
+    
     
     
     // MARK: updateBeat
     @objc func updateBeat() {
-        beatTimer.suspend()
-        if thread != nil { thread!.cancel() }
+        if thread != nil { thread!.cancel() } // REMOVE
+
+        // change tone
         currentToneIndex = UserDefaults.standard.integer(forKey: "tone") // update tone
-    
-        let currentTempo = tempoValues[currentTempoIndex]
-        let timeInterval: Double = 60.0 / Double(currentTempo)
+        let currentToneName = ToneConstants.toneNames[currentToneIndex]
+        guard let soundUrl = Bundle.main.url(forResource: currentToneName, withExtension: "caf")
+            else {
+                print("Error: unable to retrieve the default metronome tone.")
+                fatalError()
+        }
+        metronome.sound = soundUrl
+        
+        // REMOVE
+        let currentTempo = Double(tempoValues[currentTempoIndex])
+        let timeInterval: Double = 60.0 / currentTempo
         startMachTimer(seconds: timeInterval)
+        
+        // change tempo
+        let now = AVAudioTime(hostTime: mach_absolute_time())
+        metronome.setTempo(currentTempo, at: now)
     }
     
     // MARK: playOneSound
     @objc func playOneSound() {
-        beatTimer.suspend()
         currentToneIndex = UserDefaults.standard.integer(forKey: "tone") // update tone
-        playSound()
+        let currentToneName = ToneConstants.toneNames[currentToneIndex]
+        do {
+            let mixloop = try AKAudioFile(readFileName: currentToneName + ".caf")
+            let player = try AKAudioPlayer(file: mixloop)
+            player.volume = 0.75
+            AudioKit.output=player
+            player.play()
+        } catch let error {
+            print(error.localizedDescription)
+        }
     }
-    
-    // MARK: playSound
-    @objc func playSound() {
-        /* TEMP */
-        let currentTime = Date().timeIntervalSince1970
-            // this value is accurately distant from what comes before it
-        lastValue = currentTime
-        
-        // let currentToneName = ToneConstants.toneNames[currentToneIndex]
-        // guard let url = Bundle.main.url(forResource: currentToneName, withExtension: "caf") else { return }
-        /*do {
-            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
-            try AVAudioSession.sharedInstance().setActive(true)
-            try AVAudioSession.sharedInstance().setPreferredIOBufferDuration(0.005)*/
-            
-            /*let url = NSURL(fileURLWithPath: Bundle.main.path(forResource: "Logic" , ofType: "caf")!)
-            AudioServicesCreateSystemSoundID(url, &self.sound)
-            //print(self)
-            //print(self.sound)
-            AudioServicesPlaySystemSoundWithCompletion(self.sound) {
-              AudioServicesDisposeSystemSoundID(self.sound)
-            }*/
-            
-            /* The following line is required for the player to work on iOS 11. Change the file type accordingly*/
-            // player = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileType.caf.rawValue)
-            /* iOS 10 and earlier require the following line:
-             player = try AVAudioPlayer(contentsOf: url, fileTypeHint: AVFileTypeMPEGLayer3) */
-            
-            // print("BP3:",Date().timeIntervalSince1970-lastValue) // much more variance here
-            // guard let player = player else { return }
-            // print("REALSTART:",Date().timeIntervalSince1970-lastValue) // very little difference from the statement above
-            // player.play()
-            print("END:",Date().timeIntervalSince1970-lastValue) // usually .02s, but this seems to be the main culprit for when bg mode is activated
-        /*} catch let error {
-           print(error.localizedDescription)
-        }*/
-    }
-    
+
     
     
     // MARK: updatePendulum
@@ -286,7 +282,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
         moveToLeft.toValue = [0, 0]
         moveToLeft.duration = timeInterval
         moveToLeft.beginTime = moveToRight.duration
-
+        
         let backAndForth = CAAnimationGroup()
         backAndForth.animations = [moveToRight, moveToLeft]
         backAndForth.duration = moveToRight.duration + moveToLeft.duration
@@ -310,7 +306,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
     
     
     
-    // MARK: MachTimer
+    // MARK: MachTimer - REMOVE
     func startMachTimer(seconds: Double) {
         Thread.detachNewThread {
             autoreleasepool {
@@ -322,8 +318,9 @@ class ViewController: UIViewController, UITextFieldDelegate {
                     when += self.nanosToAbs(UInt64(seconds * Double(NSEC_PER_SEC))) // how long to wait
                     mach_wait_until(when)
                     if !self.metronomeOn { break } // prevents lagging sound
-                    if Thread.current.isCancelled { break }
-                    self.playSound()
+                    if Thread.current.isCancelled {
+                        print ("thread is cancelled")
+                        break }
                 } while(self.metronomeOn)
             }
         }
@@ -368,11 +365,12 @@ class ViewController: UIViewController, UITextFieldDelegate {
             updateBeat()
             updatePendulum()
             restartPendulum()
+            metronome.play()
         } else {
             metronomeOn = false
             sender.setImage(UIImage(named:"Play_White"),for: .normal)
-            beatTimer.suspend()
             pausePendulum()
+            metronome.stop()
         }
     }
     
@@ -382,3 +380,4 @@ class ViewController: UIViewController, UITextFieldDelegate {
         }
     }
 }
+

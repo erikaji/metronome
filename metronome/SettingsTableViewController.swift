@@ -12,8 +12,8 @@ class SettingsTableViewController: UITableViewController {
     // MARK: Constants & Variables
     let headers = ["Metronome Tones", "About"]
     let tones = ViewController.ToneConstants.toneNames
-    let aboutNames = ["Developer", "Fonts", "Icons", "Sounds"]
-    let aboutValues = ["Erika Ji", "Open Sans, Varela Round", "Icons8", "Freesounds, Logic, Seiko"]
+    let aboutNames = ["Developer", "Fonts", "Icons", "Sounds", "Tech"]
+    let aboutValues = ["Erika Ji", "Open Sans, Varela Round", "Icons8", "Freesounds, Logic, Seiko", "AudioKit, Swift"]
     
     var metronomeOn: Bool?
 

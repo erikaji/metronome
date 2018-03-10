@@ -7,15 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		13269D591FE4761C004E577B /* RepeatingTimer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13269D581FE4761C004E577B /* RepeatingTimer.swift */; };
-		137271A8205054D700F2937E /* Woodblock (Low).caf in Resources */ = {isa = PBXBuildFile; fileRef = 137271A4205054D700F2937E /* Woodblock (Low).caf */; };
+		00411FA9BB82577B03CBED55 /* Pods_metronomeTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40606A23E22C4C7DAEE3A385 /* Pods_metronomeTests.framework */; };
+		130967FB205342F6004C7657 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 130967FA205342F6004C7657 /* ViewController.swift */; };
+		130967FD205361DB004C7657 /* Woodblock (Low).caf in Resources */ = {isa = PBXBuildFile; fileRef = 130967FC205361DB004C7657 /* Woodblock (Low).caf */; };
 		137271A9205054D700F2937E /* Woodblock (High).caf in Resources */ = {isa = PBXBuildFile; fileRef = 137271A5205054D700F2937E /* Woodblock (High).caf */; };
 		137271AA205054D700F2937E /* Logic.caf in Resources */ = {isa = PBXBuildFile; fileRef = 137271A6205054D700F2937E /* Logic.caf */; };
 		137271AB205054D700F2937E /* Seiko.caf in Resources */ = {isa = PBXBuildFile; fileRef = 137271A7205054D700F2937E /* Seiko.caf */; };
 		1393AECA1FDEA20500892E3C /* SettingsAboutTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1393AEC91FDEA20500892E3C /* SettingsAboutTableViewCell.swift */; };
 		1393AECC1FDEA69E00892E3C /* SettingsTonesTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1393AECB1FDEA69E00892E3C /* SettingsTonesTableViewCell.swift */; };
 		139ADF2B1FD6067700D103C0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 139ADF2A1FD6067700D103C0 /* AppDelegate.swift */; };
-		139ADF2D1FD6067700D103C0 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 139ADF2C1FD6067700D103C0 /* ViewController.swift */; };
 		139ADF301FD6067700D103C0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 139ADF2E1FD6067700D103C0 /* Main.storyboard */; };
 		139ADF351FD6067700D103C0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 139ADF331FD6067700D103C0 /* LaunchScreen.storyboard */; };
 		139ADF401FD6067700D103C0 /* metronomeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 139ADF3F1FD6067700D103C0 /* metronomeTests.swift */; };
@@ -26,6 +26,7 @@
 		139ADF5C1FD8D3CF00D103C0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 139ADF5B1FD8D3CF00D103C0 /* Assets.xcassets */; };
 		13A6AF7D1FDE632B00991E7C /* Settings_Blue.png in Resources */ = {isa = PBXBuildFile; fileRef = 13A6AF7C1FDE632B00991E7C /* Settings_Blue.png */; };
 		13A6AF881FDE7BB800991E7C /* SettingsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 13A6AF821FDE689900991E7C /* SettingsTableViewController.swift */; };
+		AC103DD0F24B9919FEF94EA5 /* Pods_metronome.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E71AA6BE0168CD8E3ABEFC23 /* Pods_metronome.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,8 +40,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		13269D581FE4761C004E577B /* RepeatingTimer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepeatingTimer.swift; sourceTree = "<group>"; };
-		137271A4205054D700F2937E /* Woodblock (Low).caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Woodblock (Low).caf"; sourceTree = "<group>"; };
+		130967FA205342F6004C7657 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		130967FC205361DB004C7657 /* Woodblock (Low).caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Woodblock (Low).caf"; sourceTree = "<group>"; };
 		137271A5205054D700F2937E /* Woodblock (High).caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Woodblock (High).caf"; sourceTree = "<group>"; };
 		137271A6205054D700F2937E /* Logic.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Logic.caf; sourceTree = "<group>"; };
 		137271A7205054D700F2937E /* Seiko.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Seiko.caf; sourceTree = "<group>"; };
@@ -48,7 +49,6 @@
 		1393AECB1FDEA69E00892E3C /* SettingsTonesTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTonesTableViewCell.swift; sourceTree = "<group>"; };
 		139ADF271FD6067700D103C0 /* metronome.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = metronome.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		139ADF2A1FD6067700D103C0 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		139ADF2C1FD6067700D103C0 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		139ADF2F1FD6067700D103C0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		139ADF341FD6067700D103C0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		139ADF361FD6067700D103C0 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -62,6 +62,12 @@
 		139ADF5B1FD8D3CF00D103C0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		13A6AF7C1FDE632B00991E7C /* Settings_Blue.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Settings_Blue.png; sourceTree = "<group>"; };
 		13A6AF821FDE689900991E7C /* SettingsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsTableViewController.swift; sourceTree = "<group>"; };
+		2E58F402E2EB89A1B04DD994 /* Pods-metronomeTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-metronomeTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-metronomeTests/Pods-metronomeTests.release.xcconfig"; sourceTree = "<group>"; };
+		4058112B6905F5330FA55154 /* Pods-metronome.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-metronome.release.xcconfig"; path = "Pods/Target Support Files/Pods-metronome/Pods-metronome.release.xcconfig"; sourceTree = "<group>"; };
+		40606A23E22C4C7DAEE3A385 /* Pods_metronomeTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_metronomeTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		88D2C9CBFCB1563CCA933464 /* Pods-metronome.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-metronome.debug.xcconfig"; path = "Pods/Target Support Files/Pods-metronome/Pods-metronome.debug.xcconfig"; sourceTree = "<group>"; };
+		D3E4D7DA58244195E0FF16A5 /* Pods-metronomeTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-metronomeTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-metronomeTests/Pods-metronomeTests.debug.xcconfig"; sourceTree = "<group>"; };
+		E71AA6BE0168CD8E3ABEFC23 /* Pods_metronome.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_metronome.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -69,6 +75,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AC103DD0F24B9919FEF94EA5 /* Pods_metronome.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -76,6 +83,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				00411FA9BB82577B03CBED55 /* Pods_metronomeTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -88,6 +96,8 @@
 				139ADF291FD6067700D103C0 /* metronome */,
 				139ADF3E1FD6067700D103C0 /* metronomeTests */,
 				139ADF281FD6067700D103C0 /* Products */,
+				1774EA57911538C1C76FA45B /* Pods */,
+				D51EB50C71CDD50191705C13 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -104,9 +114,8 @@
 			isa = PBXGroup;
 			children = (
 				139ADF2A1FD6067700D103C0 /* AppDelegate.swift */,
+				130967FA205342F6004C7657 /* ViewController.swift */,
 				139ADF591FD66D5100D103C0 /* Knob.swift */,
-				13269D581FE4761C004E577B /* RepeatingTimer.swift */,
-				139ADF2C1FD6067700D103C0 /* ViewController.swift */,
 				13A6AF821FDE689900991E7C /* SettingsTableViewController.swift */,
 				1393AECB1FDEA69E00892E3C /* SettingsTonesTableViewCell.swift */,
 				1393AEC91FDEA20500892E3C /* SettingsAboutTableViewCell.swift */,
@@ -146,9 +155,29 @@
 				137271A6205054D700F2937E /* Logic.caf */,
 				137271A7205054D700F2937E /* Seiko.caf */,
 				137271A5205054D700F2937E /* Woodblock (High).caf */,
-				137271A4205054D700F2937E /* Woodblock (Low).caf */,
+				130967FC205361DB004C7657 /* Woodblock (Low).caf */,
 			);
 			path = Sounds;
+			sourceTree = "<group>";
+		};
+		1774EA57911538C1C76FA45B /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				88D2C9CBFCB1563CCA933464 /* Pods-metronome.debug.xcconfig */,
+				4058112B6905F5330FA55154 /* Pods-metronome.release.xcconfig */,
+				D3E4D7DA58244195E0FF16A5 /* Pods-metronomeTests.debug.xcconfig */,
+				2E58F402E2EB89A1B04DD994 /* Pods-metronomeTests.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		D51EB50C71CDD50191705C13 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E71AA6BE0168CD8E3ABEFC23 /* Pods_metronome.framework */,
+				40606A23E22C4C7DAEE3A385 /* Pods_metronomeTests.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -158,9 +187,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 139ADF441FD6067700D103C0 /* Build configuration list for PBXNativeTarget "metronome" */;
 			buildPhases = (
+				F90DBEBDD210868CEA9FC31E /* [CP] Check Pods Manifest.lock */,
 				139ADF231FD6067700D103C0 /* Sources */,
 				139ADF241FD6067700D103C0 /* Frameworks */,
 				139ADF251FD6067700D103C0 /* Resources */,
+				7DC16422CD3FC21A203DAEB1 /* [CP] Embed Pods Frameworks */,
+				55FB9E52101453076837C99C /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -175,9 +207,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 139ADF471FD6067700D103C0 /* Build configuration list for PBXNativeTarget "metronomeTests" */;
 			buildPhases = (
+				8DFEF2F8F7D8D8A298CA845F /* [CP] Check Pods Manifest.lock */,
 				139ADF371FD6067700D103C0 /* Sources */,
 				139ADF381FD6067700D103C0 /* Frameworks */,
 				139ADF391FD6067700D103C0 /* Resources */,
+				7C8D6E851A172C62154B5B4B /* [CP] Embed Pods Frameworks */,
+				F6D14117941A79D3557FA1F7 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -239,17 +274,17 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				139ADF571FD66B4400D103C0 /* Pause_White.png in Resources */,
-				137271AB205054D700F2937E /* Seiko.caf in Resources */,
-				139ADF351FD6067700D103C0 /* LaunchScreen.storyboard in Resources */,
-				137271A9205054D700F2937E /* Woodblock (High).caf in Resources */,
-				139ADF4B1FD644AA00D103C0 /* OpenSans-Regular.ttf in Resources */,
-				139ADF5C1FD8D3CF00D103C0 /* Assets.xcassets in Resources */,
 				139ADF301FD6067700D103C0 /* Main.storyboard in Resources */,
-				137271AA205054D700F2937E /* Logic.caf in Resources */,
-				13A6AF7D1FDE632B00991E7C /* Settings_Blue.png in Resources */,
-				137271A8205054D700F2937E /* Woodblock (Low).caf in Resources */,
+				139ADF5C1FD8D3CF00D103C0 /* Assets.xcassets in Resources */,
+				139ADF571FD66B4400D103C0 /* Pause_White.png in Resources */,
 				139ADF581FD66B4400D103C0 /* Play_White.png in Resources */,
+				13A6AF7D1FDE632B00991E7C /* Settings_Blue.png in Resources */,
+				137271AA205054D700F2937E /* Logic.caf in Resources */,
+				130967FD205361DB004C7657 /* Woodblock (Low).caf in Resources */,
+				137271AB205054D700F2937E /* Seiko.caf in Resources */,
+				137271A9205054D700F2937E /* Woodblock (High).caf in Resources */,
+				139ADF351FD6067700D103C0 /* LaunchScreen.storyboard in Resources */,
+				139ADF4B1FD644AA00D103C0 /* OpenSans-Regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -262,17 +297,115 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		55FB9E52101453076837C99C /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-metronome/Pods-metronome-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		7C8D6E851A172C62154B5B4B /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-metronomeTests/Pods-metronomeTests-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		7DC16422CD3FC21A203DAEB1 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-metronome/Pods-metronome-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		8DFEF2F8F7D8D8A298CA845F /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-metronomeTests-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F6D14117941A79D3557FA1F7 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "[CP] Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-metronomeTests/Pods-metronomeTests-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		F90DBEBDD210868CEA9FC31E /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-metronome-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		139ADF231FD6067700D103C0 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				130967FB205342F6004C7657 /* ViewController.swift in Sources */,
 				13A6AF881FDE7BB800991E7C /* SettingsTableViewController.swift in Sources */,
 				1393AECA1FDEA20500892E3C /* SettingsAboutTableViewCell.swift in Sources */,
-				139ADF2D1FD6067700D103C0 /* ViewController.swift in Sources */,
 				139ADF5A1FD66D5100D103C0 /* Knob.swift in Sources */,
 				1393AECC1FDEA69E00892E3C /* SettingsTonesTableViewCell.swift in Sources */,
-				13269D591FE4761C004E577B /* RepeatingTimer.swift in Sources */,
 				139ADF2B1FD6067700D103C0 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -424,10 +557,15 @@
 		};
 		139ADF451FD6067700D103C0 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 88D2C9CBFCB1563CCA933464 /* Pods-metronome.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = L2HQPJXYB5;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = metronome/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = erikaji.metronome;
@@ -439,10 +577,15 @@
 		};
 		139ADF461FD6067700D103C0 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4058112B6905F5330FA55154 /* Pods-metronome.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = L2HQPJXYB5;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = metronome/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = erikaji.metronome;
@@ -454,6 +597,7 @@
 		};
 		139ADF481FD6067700D103C0 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = D3E4D7DA58244195E0FF16A5 /* Pods-metronomeTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -470,6 +614,7 @@
 		};
 		139ADF491FD6067700D103C0 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 2E58F402E2EB89A1B04DD994 /* Pods-metronomeTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
