@@ -52,6 +52,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
     
     
     // MARK: Variables
+    // UI Outlets
     @IBOutlet weak var tempoLabel: UILabel!
     @IBOutlet weak var tempoNameLabel: UILabel!
     @IBOutlet weak var knobPlaceholder: UIView!
@@ -65,24 +66,18 @@ class ViewController: UIViewController, UITextFieldDelegate {
     var pendulumTrackLayer = CAShapeLayer()
     var pendulumBobLayer = CAShapeLayer()
     
+    // Metronome, courtesy of AudioKit
+    var metronome = AKSamplerMetronome()
+    var mixer = AKMixer()
+    
     // Status
     var metronomeOn = false
     var currentTempoIndex = TempoConstants.startingTempoIndex
     var currentToneIndex = ToneConstants.startingToneIndex
     
-    // Metronome, courtesy of AudioKit
-    var metronome = AKSamplerMetronome()
-    var mixer = AKMixer()
-    
-    // Thread - REMOVE
-    var timebaseInfo = mach_timebase_info_data_t()
-    var thread_id: thread_port_t = 0
-    var thread: Thread?
-    var lastValue = 0.0
     
     
-    
-    // MARK: Core
+    // MARK: Initialization
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -94,30 +89,21 @@ class ViewController: UIViewController, UITextFieldDelegate {
         
         // Setup Metronome
         let currentToneName = ToneConstants.toneNames[currentToneIndex]
-        guard let soundUrl = Bundle.main.url(forResource: currentToneName, withExtension: "caf")
-            else {
-                print("Error: unable to retrieve the default metronome tone.")
-                fatalError()
-        }
-        metronome.sound = soundUrl
+        guard let toneUrl = Bundle.main.url(forResource: currentToneName, withExtension: "caf")
+            else { fatalError("The initial metronome tone specified is invalid.") }
+        metronome.sound = toneUrl
         metronome >>> mixer
         mixer.volume = 1.0
         AudioKit.output = mixer
         
-        // Enable background playback
-        do {
-            try AKSettings.setSession(category: .playback, with: .mixWithOthers)
+        // Setup Metronome: Enable background playback
+        do { try AKSettings.setSession(category: .playback, with: .mixWithOthers)
             AKSettings.playbackWhileMuted = true
-        } catch {
-            print("Error: unable to enable background playback.")
-        }
+        } catch { print("Error: could not enable background mode.") }
         
-        // Start Metronome
-        do {
-            try AudioKit.start()
-        } catch {
-            AKLog("AudioKit did not start!")
-        }
+        // Setup Metronome: Start
+        do { try AudioKit.start()
+        } catch { AKLog("AudioKit did not start!") }
         
         // Allow the settings page to trigger beat changes
         NotificationCenter.default.addObserver(self, selector: #selector(self.updateBeat), name:NSNotification.Name(rawValue: "updateBeatNotification"), object: nil)
@@ -140,38 +126,37 @@ class ViewController: UIViewController, UITextFieldDelegate {
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
 
     
     
-    // MARK: setupTempoLabels
+    // MARK: Tempo Labels
+    // setupTempoLabels
     func setupTempoLabels() {
         tempoLabel.font = UIFont(name: "OpenSans", size: 144.0)
         tempoNameLabel.font = UIFont(name: "OpenSans", size: 30.0)
         updateLabel(tempoIndex: currentTempoIndex)
     }
     
-    // MARK: updateLabel
+    // updateLabel
     func updateLabel(tempoIndex: Int) {
         let tempo = tempoValues[tempoIndex]
         tempoLabel.text = NumberFormatter.localizedString(from: NSNumber(value: tempo), number: NumberFormatter.Style.none)
         tempoNameLabel.text = getTempoName(tempo: tempo)
     }
     
-    // MARK: getTempoName
+    // getTempoName
     func getTempoName(tempo: Int) -> String {
         for (name, tempoArray) in tempoNames {
-            if tempoArray.contains(tempo) {
-                return name
-            }
+            if tempoArray.contains(tempo) { return name }
         }
         return "" // if this function fails, return empty string
     }
     
     
     
-    // MARK: setupKnob
+    // MARK: Knob & Pendulum
+    // setupKnob
     func setupKnob() {
         // Setup track
         knob = Knob(frame: knobPlaceholder.bounds)
@@ -181,7 +166,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
         knob.endAngle = VisualConstants.endAngle
         knob.lineWidth = CGFloat(VisualConstants.lineWidth)
         
-        // Setup pointer
+        // Setup knob pointer
         knob.value = Float(currentTempoIndex) // note: needs to be determined before angles are set
         knob.circularPointer = VisualConstants.circularPointer
         knob.pointerRadius = CGFloat(VisualConstants.pointerRadius)
@@ -192,7 +177,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
         view.bringSubview(toFront: playPause)
     }
     
-    // MARK: setupPendulum
+    // setupPendulum
     func setupPendulum() {
         // Setup track
         pendulumTrackLayer.path = UIBezierPath(roundedRect: CGRect(x: 0, y: 0, width: pendulumPlaceholder.bounds.maxX, height: CGFloat(VisualConstants.lineWidth)), cornerRadius: 25).cgPath
@@ -208,7 +193,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
     
     
     
-    // MARK: knobValueChanged
+    // knobValueChanged
     @objc func knobValueChanged(inputKnob: Knob) {
         let newTempoIndex = Int(round(inputKnob.value))
         if currentTempoIndex != newTempoIndex { // only make changes when truly needed
@@ -224,62 +209,67 @@ class ViewController: UIViewController, UITextFieldDelegate {
     
     
     
-    // MARK: updateBeat
+    // MARK: Beat
+    // updateBeat
     @objc func updateBeat() {
-        if thread != nil { thread!.cancel() } // REMOVE
-
-        // change tone
+        // Change tone
         currentToneIndex = UserDefaults.standard.integer(forKey: "tone") // update tone
         let currentToneName = ToneConstants.toneNames[currentToneIndex]
-        guard let soundUrl = Bundle.main.url(forResource: currentToneName, withExtension: "caf")
-            else {
-                print("Error: unable to retrieve the default metronome tone.")
-                fatalError()
-        }
-        metronome.sound = soundUrl
+        guard let toneUrl = Bundle.main.url(forResource: currentToneName, withExtension: "caf")
+            else { fatalError("The metronome tone specified is invalid.") }
+        metronome.sound = toneUrl
         
-        // REMOVE
+        // Change tempo
         let currentTempo = Double(tempoValues[currentTempoIndex])
-        let timeInterval: Double = 60.0 / currentTempo
-        startMachTimer(seconds: timeInterval)
-        
-        // change tempo
         let now = AVAudioTime(hostTime: mach_absolute_time())
         metronome.setTempo(currentTempo, at: now)
     }
     
-    // MARK: playOneSound
+    // playOneSound
     @objc func playOneSound() {
         currentToneIndex = UserDefaults.standard.integer(forKey: "tone") // update tone
         let currentToneName = ToneConstants.toneNames[currentToneIndex]
         do {
-            let mixloop = try AKAudioFile(readFileName: currentToneName + ".caf")
-            let player = try AKAudioPlayer(file: mixloop)
+            let toneFile = try AKAudioFile(readFileName: currentToneName + ".caf")
+            let player = try AKAudioPlayer(file: toneFile)
             player.volume = 0.75
             AudioKit.output=player
             player.play()
-        } catch let error {
-            print(error.localizedDescription)
-        }
+        } catch let error { print(error.localizedDescription) }
     }
 
     
     
-    // MARK: updatePendulum
-    func updatePendulum() {
+    // MARK: Pendulum
+    // updatePendulum
+    /*
+    func moveFromLeftToRight() {
         let endX = pendulumPlaceholder.bounds.maxX - CGFloat(2.0 * VisualConstants.pointerRadius) - 2
-        let currentTempo = tempoValues[currentTempoIndex]
-        let timeInterval: Double = 60.0 / Double(currentTempo) // 60 seconds/min * 1 min/(n beats) = # seconds/beat
+        let timeInterval: Double = 60.0 / Double(metronome.tempo) // 60 seconds/min * 1 min/(n beats) = # seconds/beat
+        
+        let moveFromLeftToRight = CABasicAnimation(keyPath: "position")
+        moveFromLeftToRight.fromValue = [0, 0]
+        moveFromLeftToRight.toValue = [endX, 0]
+        moveFromLeftToRight.duration = timeInterval
+        moveFromLeftToRight.beginTime = 0
+        pendulumBobLayer.add(moveFromLeftToRight, forKey: "moveFromLeftToRight")
+    }*/
+    
+    func updatePendulum() {
+        let startX = 0
+        let endX = pendulumPlaceholder.bounds.maxX - CGFloat(2.0 * VisualConstants.pointerRadius) - 2
+        let timeInterval: Double = 60.0 / Double(metronome.tempo)
+            // 60 seconds/min * 1 min/(n beats) = # seconds/beat
         
         let moveToRight = CABasicAnimation(keyPath: "position")
-        moveToRight.fromValue = [0, 0]
+        moveToRight.fromValue = [startX, 0]
         moveToRight.toValue = [endX, 0]
         moveToRight.duration = timeInterval
         moveToRight.beginTime = 0
         
         let moveToLeft = CABasicAnimation(keyPath: "position")
         moveToLeft.fromValue = [endX, 0]
-        moveToLeft.toValue = [0, 0]
+        moveToLeft.toValue = [startX, 0]
         moveToLeft.duration = timeInterval
         moveToLeft.beginTime = moveToRight.duration
         
@@ -292,67 +282,16 @@ class ViewController: UIViewController, UITextFieldDelegate {
         pendulumBobLayer.add(backAndForth, forKey: "backAndForth")
     }
     
-    // MARK: pausePendulum
+    // pausePendulum
     func pausePendulum() {
         let pausedTime = pendulumBobLayer.convertTime(CACurrentMediaTime(), from: nil)
         pendulumBobLayer.speed = 0.0
         pendulumBobLayer.timeOffset = pausedTime
     }
     
-    // MARK: restartPendulum
+    // restartPendulum
     func restartPendulum() {
         pendulumBobLayer.speed = 1.0
-    }
-    
-    
-    
-    // MARK: MachTimer - REMOVE
-    func startMachTimer(seconds: Double) {
-        Thread.detachNewThread {
-            autoreleasepool {
-                self.configureThread()
-                self.thread = Thread.current
-                print(Thread.current)
-                var when = mach_absolute_time()
-                repeat {
-                    when += self.nanosToAbs(UInt64(seconds * Double(NSEC_PER_SEC))) // how long to wait
-                    mach_wait_until(when)
-                    if !self.metronomeOn { break } // prevents lagging sound
-                    if Thread.current.isCancelled {
-                        print ("thread is cancelled")
-                        break }
-                } while(self.metronomeOn)
-            }
-        }
-    }
-    
-    func configureThread() {
-        mach_timebase_info(&timebaseInfo)
-        
-        let clock2abs = Double(timebaseInfo.denom) / Double(timebaseInfo.numer) * Double(NSEC_PER_SEC)
-        var policy = thread_time_constraint_policy()
-        policy.period      = UInt32(0.00 * clock2abs)
-        policy.computation = UInt32(0.03 * clock2abs) // 30 ms of work
-        policy.constraint  = UInt32(0.05 * clock2abs)
-        policy.preemptible = 0
-        
-        thread_id = pthread_mach_thread_np(pthread_self())
-        let THREAD_TIME_CONSTRAINT_POLICY_COUNT = mach_msg_type_number_t(MemoryLayout<thread_time_constraint_policy>.size / MemoryLayout<integer_t>.size)
-        
-        let ret: Int32 = withUnsafeMutablePointer(to: &policy) {
-            $0.withMemoryRebound(to: integer_t.self, capacity: Int(THREAD_TIME_CONSTRAINT_POLICY_COUNT)) {
-                thread_policy_set(thread_id, UInt32(THREAD_TIME_CONSTRAINT_POLICY), $0, THREAD_TIME_CONSTRAINT_POLICY_COUNT)
-            }
-        }
-        
-        if ret != KERN_SUCCESS {
-            mach_error("thread_policy_set:", ret)
-            exit(1)
-        }
-    }
-    
-    func nanosToAbs(_ nanos: UInt64) -> UInt64 {
-        return nanos * UInt64(timebaseInfo.denom) / UInt64(timebaseInfo.numer)
     }
     
     
