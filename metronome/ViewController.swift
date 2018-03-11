@@ -237,7 +237,10 @@ class ViewController: UIViewController, UITextFieldDelegate {
     // MARK: Beat
     // updateBeat
     @objc func updateBeat() {
-        if sequencer.isPlaying { sequencer.stop() }
+        if sequencer.isPlaying {
+            sequencer.stop()
+            sequencer.rewind()
+        }
         
         // Change tone
         currentToneIndex = UserDefaults.standard.integer(forKey: "tone") // update tone
@@ -249,7 +252,8 @@ class ViewController: UIViewController, UITextFieldDelegate {
         let currentTempo = Double(tempoValues[currentTempoIndex])
         sequencer.setTempo(currentTempo)
         
-        sequencer.rewind()
+        
+        // sequencer.setTime(Double(60.0/currentTempo))
         sequencer.play()
     }
     
@@ -258,7 +262,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
         currentToneIndex = UserDefaults.standard.integer(forKey: "tone") // update tone
         let currentToneName = ToneConstants.toneNames[currentToneIndex]
         do {
-            let toneFile = try AKAudioFile(readFileName: currentToneName + ".caf")
+            let toneFile = try AKAudioFile(readFileName: currentToneName + ".wav")
             let player = try AKAudioPlayer(file: toneFile)
             player.volume = 0.75
             AudioKit.output=player
