@@ -67,9 +67,6 @@ class ViewController: UIViewController, UITextFieldDelegate {
     var pendulumBobLayer = CAShapeLayer()
     
     // Metronome, courtesy of AudioKit
-    var metronome = AKSamplerMetronome()
-    var mixer = AKMixer()
-    
     var sequencer = AKSequencer()
     var sampler = AKMIDISampler()
     var callbackInst = AKCallbackInstrument()
@@ -186,10 +183,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
         if currentTempoIndex != newTempoIndex { // only make changes when truly needed
             currentTempoIndex = newTempoIndex
             updateLabel(tempoIndex: currentTempoIndex)
-            if metronomeOn == true {
-                updateBeat()
-                updatePendulum()
-            }
+            if metronomeOn == true { updateBeat() }
             knob.value = Float(currentTempoIndex)
         }
     }
@@ -221,7 +215,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
         callbackTrack?.setMIDIOutput(callbackInst.midiIn)
         
         // Create the MIDI data
-        for i in 0 ..< 2 {
+        for i in 1 ..< 3 {
             // This will trigger the sampler on the two down beats
             metronomeTrack?.add(noteNumber: 60, velocity: 127, position: AKDuration(beats: Double(i)), duration: AKDuration(beats: 1))
             // Set the midiNote number to the current beat number; use this in the callback
@@ -243,23 +237,19 @@ class ViewController: UIViewController, UITextFieldDelegate {
     // MARK: Beat
     // updateBeat
     @objc func updateBeat() {
-        sequencer.stop()
+        if sequencer.isPlaying { sequencer.stop() }
+        
         // Change tone
         currentToneIndex = UserDefaults.standard.integer(forKey: "tone") // update tone
         let currentToneName = ToneConstants.toneNames[currentToneIndex]
-       /* guard let toneUrl = Bundle.main.url(forResource: currentToneName, withExtension: "caf")
-            else { fatalError("The metronome tone specified is invalid.") }
-        metronome.sound = toneUrl*/
-        
         do { try sampler.loadWav(currentToneName)
         } catch { print("Error: could not load initial metronome tone.") }
         
         // Change tempo
         let currentTempo = Double(tempoValues[currentTempoIndex])
-        /*let now = AVAudioTime(hostTime: mach_absolute_time())
-        metronome.setTempo(currentTempo, at: now)*/
         sequencer.setTempo(currentTempo)
         
+        sequencer.rewind()
         sequencer.play()
     }
     
@@ -281,9 +271,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
     // MARK: Pendulum
     // movePendulum
     func movePendulum(noteNumber: Int) {
-        print("hello. moving pendulum")
         DispatchQueue.main.async {
-            print(self.pendulumPlaceholder.bounds.maxX)
             let startX = 0
             let endX = self.pendulumPlaceholder.bounds.maxX - CGFloat(2.0 * VisualConstants.pointerRadius) - 2
             let timeInterval: Double = 60.0 / Double(self.sequencer.tempo)
@@ -294,101 +282,17 @@ class ViewController: UIViewController, UITextFieldDelegate {
             move.beginTime = 0
             move.isRemovedOnCompletion = false
             move.fillMode = kCAFillModeForwards
-            
-            /* var pendulumNumber: Int
-            if self.sequencer.currentRelativePosition.beats < 1 {
-                pendulumNumber = 0
-            } else {
-                pendulumNumber = 1
-            } */
-            
-            print("sequencer no: \(noteNumber)")
 
-            if noteNumber == 0 {
+            if noteNumber == 1 { // left to right
                 move.fromValue = [startX, 0]
                 move.toValue = [endX, 0]
-            } else {
+            } else { // right to left
                 move.fromValue = [endX, 0]
                 move.toValue = [startX, 0]
             }
-            print("mid1")
+            
             self.pendulumBobLayer.add(move, forKey: "move")
-            print("mid2")
-            if noteNumber == 0 {
-                // self.pendulumBobLayer.position = CGPoint(x: endX, y: 0)
-            } else {
-                // self.pendulumBobLayer.position = CGPoint(x: startX, y: 0)
-            }
-            print("end animation")
-            
-            /*
-            let moveToRight = CABasicAnimation(keyPath: "position")
-            moveToRight.fromValue = [startX, 0]
-            moveToRight.toValue = [endX, 0]
-            moveToRight.duration = timeInterval
-            moveToRight.beginTime = 0
-            
-            let moveToLeft = CABasicAnimation(keyPath: "position")
-            moveToLeft.fromValue = [endX, 0]
-            moveToLeft.toValue = [startX, 0]
-            moveToLeft.duration = timeInterval
-            moveToLeft.beginTime = moveToRight.duration
-            
-            let backAndForth = CAAnimationGroup()
-            backAndForth.animations = [moveToRight, moveToLeft]
-            backAndForth.duration = moveToRight.duration + moveToLeft.duration
-            backAndForth.repeatCount = Float.infinity
-            backAndForth.isRemovedOnCompletion = false
-            
-            self.pendulumBobLayer.add(backAndForth, forKey: "backAndForth")
- */
-            
         }
-    }
-    
-    // updatePendulum
-    func updatePendulum() {
-        /*let startX = 0
-        let endX = pendulumPlaceholder.bounds.maxX - CGFloat(2.0 * VisualConstants.pointerRadius) - 2
-        let timeInterval: Double = 60.0 / Double(metronome.tempo)
-        // 60 seconds/min * 1 min/(n beats) = # seconds/beat
-        
-        let moveToRight = CABasicAnimation(keyPath: "position")
-        moveToRight.fromValue = [startX, 0]
-        moveToRight.toValue = [endX, 0]
-        moveToRight.duration = timeInterval
-        moveToRight.beginTime = 0
-        
-        let moveToLeft = CABasicAnimation(keyPath: "position")
-        moveToLeft.fromValue = [endX, 0]
-        moveToLeft.toValue = [startX, 0]
-        moveToLeft.duration = timeInterval
-        moveToLeft.beginTime = moveToRight.duration
-        
-        let backAndForth = CAAnimationGroup()
-        backAndForth.animations = [moveToRight, moveToLeft]
-        backAndForth.duration = moveToRight.duration + moveToLeft.duration
-        backAndForth.repeatCount = Float.infinity
-        backAndForth.isRemovedOnCompletion = false
-        
-        pendulumBobLayer.add(backAndForth, forKey: "backAndForth")*/
-    }
-    
-    // pausePendulum
-    func pausePendulum() {
-        /* let pausedTime = pendulumBobLayer.convertTime(CACurrentMediaTime(), from: nil)
-        pendulumBobLayer.speed = 0.0
-        pendulumBobLayer.timeOffset = pausedTime */
-    }
-    
-    // restartPendulum
-    func restartPendulum() {
-       /* CATransaction.begin()
-        CATransaction.setValue(kCFBooleanTrue, forKey: kCATransactionDisableActions)
-        pendulumBobLayer.position = CGPoint(x: 0, y: 0)
-        CATransaction.commit()
-        print("done")
-        pendulumBobLayer.speed = 1.0 */
     }
     
     
@@ -399,15 +303,9 @@ class ViewController: UIViewController, UITextFieldDelegate {
             metronomeOn = true
             sender.setImage(UIImage(named:"Pause_White"),for: .normal)
             updateBeat()
-            updatePendulum()
-            // metronome.play()
-            // sequencer.play()
-            restartPendulum()
         } else {
             metronomeOn = false
             sender.setImage(UIImage(named:"Play_White"),for: .normal)
-            pausePendulum()
-            // metronome.stop()
             sequencer.stop()
         }
     }
