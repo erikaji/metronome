@@ -67,8 +67,13 @@ class ViewController: UIViewController, UITextFieldDelegate {
     var pendulumBobLayer = CAShapeLayer()
     
     // Metronome, courtesy of AudioKit
-    var metronome = AKSamplerMetronome()
-    var mixer = AKMixer()
+    /* var metronome = AKSamplerMetronome()
+    var mixer = AKMixer() */
+    
+    // Metronome 2, courtesy of AudioKit
+    let sequencer = AKSequencer()
+    let sampler = AKMIDISampler()
+    let callbackInst = AKCallbackInstrument()
     
     // Status
     var metronomeOn = false
@@ -87,14 +92,20 @@ class ViewController: UIViewController, UITextFieldDelegate {
         setupPendulum()
         UserDefaults.standard.set(currentToneIndex, forKey: "tone")
         
-        // Setup Metronome
         let currentToneName = ToneConstants.toneNames[currentToneIndex]
+        // Setup Metronome
+        /*
         guard let toneUrl = Bundle.main.url(forResource: currentToneName, withExtension: "caf")
             else { fatalError("The initial metronome tone specified is invalid.") }
         metronome.sound = toneUrl
         metronome >>> mixer
         mixer.volume = 1.0
-        AudioKit.output = mixer
+        AudioKit.output = mixer*/
+        
+        // Metronome 2
+        do { try sampler.loadWav(currentToneName)
+        } catch { print("Error: could not load initial metronome tone.") }
+        AudioKit.output = sampler
         
         // Setup Metronome: Enable background playback
         do { try AKSettings.setSession(category: .playback, with: .mixWithOthers)
@@ -104,6 +115,29 @@ class ViewController: UIViewController, UITextFieldDelegate {
         // Setup Metronome: Start
         do { try AudioKit.start()
         } catch { AKLog("AudioKit did not start!") }
+        
+        // Metronome 2 again
+        let metronomeTrack = sequencer.newTrack()
+        metronomeTrack?.setMIDIOutput(sampler.midiIn)
+        let callbackTrack = sequencer.newTrack()
+        callbackTrack?.setMIDIOutput(callbackInst.midiIn)
+        
+        // create the MIDI data
+        for i in 0 ..< 4 {
+            // this will trigger the sampler on the four down beats
+            metronomeTrack?.add(noteNumber: 60, velocity: 100, position: AKDuration(beats: Double(i)), duration: AKDuration(beats: 0.5))
+            // set the midiNote number to the current beat number
+            callbackTrack?.add(noteNumber: MIDINoteNumber(i), velocity: 100, position: AKDuration(beats: Double(i)), duration: AKDuration(beats: 0.5))
+        }
+        
+        // set the callback
+        callbackInst.callback = {status, noteNumber, velocity in
+            guard status == .noteOn else { return }
+            print("beat number: \(noteNumber + 1)")
+        }
+        
+        // get the sequencer ready
+        sequencer.enableLooping(AKDuration(beats: 4))
         
         // Allow the settings page to trigger beat changes
         NotificationCenter.default.addObserver(self, selector: #selector(self.updateBeat), name:NSNotification.Name(rawValue: "updateBeatNotification"), object: nil)
@@ -215,14 +249,19 @@ class ViewController: UIViewController, UITextFieldDelegate {
         // Change tone
         currentToneIndex = UserDefaults.standard.integer(forKey: "tone") // update tone
         let currentToneName = ToneConstants.toneNames[currentToneIndex]
-        guard let toneUrl = Bundle.main.url(forResource: currentToneName, withExtension: "caf")
+        /* guard let toneUrl = Bundle.main.url(forResource: currentToneName, withExtension: "caf")
             else { fatalError("The metronome tone specified is invalid.") }
-        metronome.sound = toneUrl
+        metronome.sound = toneUrl */
+        do { try sampler.loadWav(currentToneName)
+        } catch { print("Error: could not load metronome tone.") }
+        AudioKit.output = sampler
+        
         
         // Change tempo
         let currentTempo = Double(tempoValues[currentTempoIndex])
-        let now = AVAudioTime(hostTime: mach_absolute_time())
-        metronome.setTempo(currentTempo, at: now)
+        /* let now = AVAudioTime(hostTime: mach_absolute_time())
+        metronome.setTempo(currentTempo, at: now) */
+        sequencer.setTempo(currentTempo)
     }
     
     // playOneSound
@@ -258,7 +297,11 @@ class ViewController: UIViewController, UITextFieldDelegate {
     func updatePendulum() {
         let startX = 0
         let endX = pendulumPlaceholder.bounds.maxX - CGFloat(2.0 * VisualConstants.pointerRadius) - 2
-        let timeInterval: Double = 60.0 / Double(metronome.tempo)
+        
+        // REMOVE
+        let currentTempo = Double(tempoValues[currentTempoIndex])
+        let timeInterval: Double = 60.0 / Double(currentTempo)
+        // let timeInterval: Double = 60.0 / Double(metronome.tempo)
             // 60 seconds/min * 1 min/(n beats) = # seconds/beat
         
         let moveToRight = CABasicAnimation(keyPath: "position")
@@ -304,12 +347,15 @@ class ViewController: UIViewController, UITextFieldDelegate {
             updateBeat()
             updatePendulum()
             restartPendulum()
-            metronome.play()
+            // metronome.play()
+            sequencer.play()
+            
         } else {
             metronomeOn = false
             sender.setImage(UIImage(named:"Play_White"),for: .normal)
             pausePendulum()
-            metronome.stop()
+            // metronome.stop()
+            sequencer.stop()
         }
     }
     

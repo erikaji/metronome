@@ -10,6 +10,10 @@
 		00411FA9BB82577B03CBED55 /* Pods_metronomeTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 40606A23E22C4C7DAEE3A385 /* Pods_metronomeTests.framework */; };
 		130967FB205342F6004C7657 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 130967FA205342F6004C7657 /* ViewController.swift */; };
 		130967FD205361DB004C7657 /* Woodblock (Low).caf in Resources */ = {isa = PBXBuildFile; fileRef = 130967FC205361DB004C7657 /* Woodblock (Low).caf */; };
+		130968022054D18B004C7657 /* Woodblock (Low).wav in Resources */ = {isa = PBXBuildFile; fileRef = 130967FE2054D18B004C7657 /* Woodblock (Low).wav */; };
+		130968032054D18B004C7657 /* Seiko.wav in Resources */ = {isa = PBXBuildFile; fileRef = 130967FF2054D18B004C7657 /* Seiko.wav */; };
+		130968042054D18B004C7657 /* Logic.wav in Resources */ = {isa = PBXBuildFile; fileRef = 130968002054D18B004C7657 /* Logic.wav */; };
+		130968052054D18B004C7657 /* Woodblock (High).wav in Resources */ = {isa = PBXBuildFile; fileRef = 130968012054D18B004C7657 /* Woodblock (High).wav */; };
 		137271A9205054D700F2937E /* Woodblock (High).caf in Resources */ = {isa = PBXBuildFile; fileRef = 137271A5205054D700F2937E /* Woodblock (High).caf */; };
 		137271AA205054D700F2937E /* Logic.caf in Resources */ = {isa = PBXBuildFile; fileRef = 137271A6205054D700F2937E /* Logic.caf */; };
 		137271AB205054D700F2937E /* Seiko.caf in Resources */ = {isa = PBXBuildFile; fileRef = 137271A7205054D700F2937E /* Seiko.caf */; };
@@ -42,6 +46,10 @@
 /* Begin PBXFileReference section */
 		130967FA205342F6004C7657 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		130967FC205361DB004C7657 /* Woodblock (Low).caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Woodblock (Low).caf"; sourceTree = "<group>"; };
+		130967FE2054D18B004C7657 /* Woodblock (Low).wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "Woodblock (Low).wav"; sourceTree = "<group>"; };
+		130967FF2054D18B004C7657 /* Seiko.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Seiko.wav; sourceTree = "<group>"; };
+		130968002054D18B004C7657 /* Logic.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = Logic.wav; sourceTree = "<group>"; };
+		130968012054D18B004C7657 /* Woodblock (High).wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "Woodblock (High).wav"; sourceTree = "<group>"; };
 		137271A5205054D700F2937E /* Woodblock (High).caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Woodblock (High).caf"; sourceTree = "<group>"; };
 		137271A6205054D700F2937E /* Logic.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Logic.caf; sourceTree = "<group>"; };
 		137271A7205054D700F2937E /* Seiko.caf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Seiko.caf; sourceTree = "<group>"; };
@@ -152,6 +160,10 @@
 		139ADF521FD651F100D103C0 /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
+				130968002054D18B004C7657 /* Logic.wav */,
+				130967FF2054D18B004C7657 /* Seiko.wav */,
+				130968012054D18B004C7657 /* Woodblock (High).wav */,
+				130967FE2054D18B004C7657 /* Woodblock (Low).wav */,
 				137271A6205054D700F2937E /* Logic.caf */,
 				137271A7205054D700F2937E /* Seiko.caf */,
 				137271A5205054D700F2937E /* Woodblock (High).caf */,
@@ -277,13 +289,17 @@
 				139ADF301FD6067700D103C0 /* Main.storyboard in Resources */,
 				139ADF5C1FD8D3CF00D103C0 /* Assets.xcassets in Resources */,
 				139ADF571FD66B4400D103C0 /* Pause_White.png in Resources */,
+				130968032054D18B004C7657 /* Seiko.wav in Resources */,
 				139ADF581FD66B4400D103C0 /* Play_White.png in Resources */,
+				130968042054D18B004C7657 /* Logic.wav in Resources */,
 				13A6AF7D1FDE632B00991E7C /* Settings_Blue.png in Resources */,
 				137271AA205054D700F2937E /* Logic.caf in Resources */,
 				130967FD205361DB004C7657 /* Woodblock (Low).caf in Resources */,
 				137271AB205054D700F2937E /* Seiko.caf in Resources */,
+				130968052054D18B004C7657 /* Woodblock (High).wav in Resources */,
 				137271A9205054D700F2937E /* Woodblock (High).caf in Resources */,
 				139ADF351FD6067700D103C0 /* LaunchScreen.storyboard in Resources */,
+				130968022054D18B004C7657 /* Woodblock (Low).wav in Resources */,
 				139ADF4B1FD644AA00D103C0 /* OpenSans-Regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
