@@ -123,10 +123,17 @@ class ViewController: UIViewController, UITextFieldDelegate {
         tempoLabel.font = UIFont(name: "OpenSans", size: 144.0)
         tempoNameLabel.font = UIFont(name: "OpenSans", size: 30.0)
         updateLabel(tempoIndex: currentTempoIndex)
-       
+        
         // Positioning
-        tempoLabel.center.x = self.view.center.x
-        tempoNameLabel.center.x = self.view.center.x
+        tempoLabel.translatesAutoresizingMaskIntoConstraints = false
+        tempoLabel.widthAnchor.constraint(greaterThanOrEqualToConstant: 300).isActive = true
+        tempoLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: 150).isActive = true
+        tempoLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        tempoNameLabel.translatesAutoresizingMaskIntoConstraints = false
+        tempoNameLabel.widthAnchor.constraint(greaterThanOrEqualToConstant: 300).isActive = true
+        tempoNameLabel.heightAnchor.constraint(greaterThanOrEqualToConstant: 50).isActive = true
+        tempoNameLabel.centerXAnchor.constraint(equalTo: self.view.centerXAnchor).isActive = true
+        tempoNameLabel.topAnchor.constraint(equalTo: tempoLabel.bottomAnchor, constant: -25).isActive = true
     }
     
     // updateLabel
@@ -220,11 +227,6 @@ class ViewController: UIViewController, UITextFieldDelegate {
         
         let minSizeConstraint = settings.heightAnchor.constraint(equalToConstant: 33)
         minSizeConstraint.isActive = true
-
-        let maxSizeConstraint = settings.leadingAnchor.constraint(greaterThanOrEqualTo:
-            self.knobPlaceholder.trailingAnchor, constant: 10)
-        maxSizeConstraint.priority = UILayoutPriority(rawValue: 100) // lowest priority
-        maxSizeConstraint.isActive = true
     }
     
     
