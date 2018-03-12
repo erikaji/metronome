@@ -211,14 +211,20 @@ class ViewController: UIViewController, UITextFieldDelegate {
         settings.titleLabel?.layer.opacity = 0
         settings.heightAnchor.constraint(equalTo:
             settings.widthAnchor).isActive = true
-        settings.leadingAnchor.constraint(greaterThanOrEqualTo:
-            self.knobPlaceholder.trailingAnchor, constant: 10).isActive = true
         settings.trailingAnchor.constraint(equalTo:
             self.view.layoutMarginsGuide.trailingAnchor).isActive = true
         settings.topAnchor.constraint(equalTo:
             self.view.layoutMarginsGuide.topAnchor, constant: 10).isActive = true
         settings.bottomAnchor.constraint(lessThanOrEqualTo:
             self.tempoLabel.topAnchor).isActive = true
+        
+        let minSizeConstraint = settings.heightAnchor.constraint(equalToConstant: 33)
+        minSizeConstraint.isActive = true
+
+        let maxSizeConstraint = settings.leadingAnchor.constraint(greaterThanOrEqualTo:
+            self.knobPlaceholder.trailingAnchor, constant: 10)
+        maxSizeConstraint.priority = UILayoutPriority(rawValue: 100) // lowest priority
+        maxSizeConstraint.isActive = true
     }
     
     
