@@ -58,6 +58,7 @@ class ViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var knobPlaceholder: UIView!
     @IBOutlet weak var pendulumPlaceholder: UIView!
     @IBOutlet weak var playPause: UIButton!
+    @IBOutlet weak var settings: UIButton!
     
     // Knob
     var knob: Knob!
@@ -86,8 +87,8 @@ class ViewController: UIViewController, UITextFieldDelegate {
         setupTempoLabels()
         setupKnob()
         setupPendulum()
-        UserDefaults.standard.set(currentToneIndex, forKey: "tone")
-        
+        setupSettings()
+       
         // Setup Metronome
         setupMetronome()
         
@@ -122,6 +123,10 @@ class ViewController: UIViewController, UITextFieldDelegate {
         tempoLabel.font = UIFont(name: "OpenSans", size: 144.0)
         tempoNameLabel.font = UIFont(name: "OpenSans", size: 30.0)
         updateLabel(tempoIndex: currentTempoIndex)
+       
+        // Positioning
+        tempoLabel.center.x = self.view.center.x
+        tempoNameLabel.center.x = self.view.center.x
     }
     
     // updateLabel
@@ -161,6 +166,11 @@ class ViewController: UIViewController, UITextFieldDelegate {
         knobPlaceholder.addSubview(knob)
         view.tintColor = VisualConstants.lineColor
         view.bringSubview(toFront: playPause)
+        
+        // Position the knob
+        knobPlaceholder.center.x = self.view.center.x
+        playPause.center.x = knobPlaceholder.center.x
+        playPause.center.y = knobPlaceholder.center.y
     }
     
     // setupPendulum
@@ -175,6 +185,9 @@ class ViewController: UIViewController, UITextFieldDelegate {
         pendulumBobLayer.path = UIBezierPath(ovalIn: pendulumBobRect).cgPath
         pendulumBobLayer.fillColor = VisualConstants.pendulumBobColor
         pendulumPlaceholder.layer.addSublayer(pendulumBobLayer)
+        
+        // Position the pendulum
+        pendulumPlaceholder.center.x = knobPlaceholder.center.x
     }
     
     // knobValueChanged
@@ -186,6 +199,26 @@ class ViewController: UIViewController, UITextFieldDelegate {
             if metronomeOn == true { updateBeat() }
             knob.value = Float(currentTempoIndex)
         }
+    }
+    
+    // MARK: Settings
+    // setupSettings
+    func setupSettings() {
+        UserDefaults.standard.set(currentToneIndex, forKey: "tone")
+        
+        // Position the settings icon
+        settings.translatesAutoresizingMaskIntoConstraints = false
+        settings.titleLabel?.layer.opacity = 0
+        settings.heightAnchor.constraint(equalTo:
+            settings.widthAnchor).isActive = true
+        settings.leadingAnchor.constraint(greaterThanOrEqualTo:
+            self.knobPlaceholder.trailingAnchor, constant: 10).isActive = true
+        settings.trailingAnchor.constraint(equalTo:
+            self.view.layoutMarginsGuide.trailingAnchor).isActive = true
+        settings.topAnchor.constraint(equalTo:
+            self.view.layoutMarginsGuide.topAnchor, constant: 10).isActive = true
+        settings.bottomAnchor.constraint(lessThanOrEqualTo:
+            self.tempoLabel.topAnchor).isActive = true
     }
     
     
